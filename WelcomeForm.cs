@@ -18,7 +18,17 @@ namespace SuperSudoku
 
         private void generateButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            DifficultyForm dform = new DifficultyForm();
+            Generator gen = new Generator();
+            dform.ShowDialog();
+            if (dform.HasResult)
+            {
+                this.Hide();
+                gen.Generate(dform.Result);
+                GameForm gform = new GameForm(gen.SolutionGrid);
+                gform.ShowDialog();
+                this.Close();
+            }
         }
 
         /// <summary>

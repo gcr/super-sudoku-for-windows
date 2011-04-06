@@ -43,9 +43,9 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameRulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sudokuGrid = new System.Windows.Forms.PictureBox();
             this.hintBarText = new System.Windows.Forms.Label();
             this.solveButton = new System.Windows.Forms.Button();
+            this.sudokuGrid = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sudokuGrid)).BeginInit();
             this.SuspendLayout();
@@ -173,25 +173,13 @@
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.HelpAboutClick);
             // 
-            // sudokuGrid
-            // 
-            this.sudokuGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sudokuGrid.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.sudokuGrid.Location = new System.Drawing.Point(0, 40);
-            this.sudokuGrid.Name = "sudokuGrid";
-            this.sudokuGrid.Size = new System.Drawing.Size(466, 399);
-            this.sudokuGrid.TabIndex = 2;
-            this.sudokuGrid.TabStop = false;
-            // 
             // hintBarText
             // 
             this.hintBarText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.hintBarText.AutoSize = true;
             this.hintBarText.Location = new System.Drawing.Point(12, 456);
             this.hintBarText.Name = "hintBarText";
-            this.hintBarText.Size = new System.Drawing.Size(89, 25);
+            this.hintBarText.Size = new System.Drawing.Size(45, 13);
             this.hintBarText.TabIndex = 3;
             this.hintBarText.Text = "Hint Bar";
             // 
@@ -204,6 +192,18 @@
             this.solveButton.TabIndex = 4;
             this.solveButton.Text = "Solve...";
             this.solveButton.UseVisualStyleBackColor = true;
+            // 
+            // sudokuGrid
+            // 
+            this.sudokuGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sudokuGrid.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.sudokuGrid.Location = new System.Drawing.Point(0, 40);
+            this.sudokuGrid.Name = "sudokuGrid";
+            this.sudokuGrid.Size = new System.Drawing.Size(466, 399);
+            this.sudokuGrid.TabIndex = 2;
+            this.sudokuGrid.TabStop = false;
             // 
             // GameForm
             // 
@@ -242,8 +242,8 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gameRulesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.PictureBox sudokuGrid;
         private System.Windows.Forms.Label hintBarText;
         private System.Windows.Forms.Button solveButton;
+        private System.Windows.Forms.PictureBox sudokuGrid;
     }
 }

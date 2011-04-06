@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SuperSudoku
 {
-    enum DifficultyLevel {Easy, Medium, Hard};
+    public enum DifficultyLevel {Easy, Medium, Hard};
 
     class Generator
     {

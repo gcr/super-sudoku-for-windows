@@ -50,6 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DifficultyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DifficultyForm.Designer.cs">
+      <DependentUpon>DifficultyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="File.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
@@ -68,6 +74,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DifficultyForm.resx">
+      <DependentUpon>DifficultyForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
       <SubType>Designer</SubType>
