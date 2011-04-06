@@ -9,7 +9,7 @@ namespace SuperSudoku
     /// <summary>
     /// This class is a sudoku grid.
     /// </summary>
-    class Grid
+    public class Grid
     {
 
         private int[][] elts;
@@ -168,7 +168,7 @@ namespace SuperSudoku
         /// </summary>
         public Grid Copy()
         {
-            return new Grid(this.elts.Select((row) => row.Clone()).ToArray());
+            return new Grid(this.elts.Select((row) => (int[])row.Clone()).ToArray());
         }
 
         
