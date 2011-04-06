@@ -189,7 +189,6 @@
             // 
             this.hintBarText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.hintBarText.AutoSize = true;
-            this.hintBarText.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hintBarText.Location = new System.Drawing.Point(12, 456);
             this.hintBarText.Name = "hintBarText";
             this.hintBarText.Size = new System.Drawing.Size(89, 25);
