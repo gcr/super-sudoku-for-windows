@@ -1,6 +1,6 @@
 ﻿namespace SuperSudoku
 {
-    partial class Form1
+    partial class WelcomeForm
     {
         /// <summary>
         /// Required designer variable.
