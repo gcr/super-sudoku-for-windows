@@ -163,6 +163,14 @@ namespace SuperSudoku
             this.elts = elements.Select((elt) => elt.ToArray()).ToArray();
         }
 
+        /// <summary>
+        /// Return a copy of this grid.
+        /// </summary>
+        public Grid Copy()
+        {
+            return new Grid(this.elts.Select((row) => row.Clone()).ToArray());
+        }
+
         
     }
 }
