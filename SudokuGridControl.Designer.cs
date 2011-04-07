@@ -33,7 +33,7 @@
             // 
             // table
             // 
-            this.table.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.table.BackColor = System.Drawing.Color.DimGray;
             this.table.ColumnCount = 1;
             this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.table.Dock = System.Windows.Forms.DockStyle.Fill;

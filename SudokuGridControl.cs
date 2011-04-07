@@ -46,25 +46,60 @@ namespace SuperSudoku
         {
             // ADD EIGHTY ONE TEXT BOXEN
             table.Dock = DockStyle.Fill;
+            table.Padding = new Padding(2);
             table.Margin = new Padding(0);
-            table.Padding = new Padding(0);
             table.RowStyles.Clear();
             table.ColumnStyles.Clear();
-            table.ColumnCount = 9;
-            table.RowCount = 9;
+            table.ColumnCount = 3;
+            table.RowCount = 3;
             table.Controls.Clear();
 
+            // This table will have 9 subtables
+            // Each subtable will have 9 textboxes.
+            // The only reason why I'm using subtables
+            // is because C# doesn't provide me a way of setting border widths. Ew.
+
+            // First, initialize the boxes array
             boxes = new TextBox[9][];
-            for (int row = 0; row < 9; row++)
+            for (int i = 0; i < 9; i++)
             {
-                table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, (float)(100.0 / 9)));
-                table.RowStyles.Add(new RowStyle(SizeType.Percent, (float)(100.0 / 9)));
-                boxes[row] = new TextBox[9];
-                for (int col = 0; col < 9; col++)
+                boxes[i] = new TextBox[9];
+            }
+
+            // Then, draw the subtables.
+            for (int tableRow = 0; tableRow < 3; tableRow++)
+            {
+                table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, (float)(100.0 / 3)));
+                table.RowStyles.Add(new RowStyle(SizeType.Percent, (float)(100.0 / 3)));
+                
+                for (int tableCol = 0; tableCol < 3; tableCol++)
                 {
-                    TextBox newBox = makeTextBox(row, col);
-                    boxes[row][col] = newBox;
-                    table.Controls.Add(newBox, col, row);
+                    // Each subtable
+                    TableLayoutPanel subTable = new TableLayoutPanel();
+                    table.Controls.Add(subTable, tableCol, tableRow);
+
+                    subTable.Dock = DockStyle.Fill;
+                    subTable.Padding = new Padding(0);
+                    subTable.Margin = new Padding(1);
+                    subTable.RowStyles.Clear();
+                    subTable.ColumnStyles.Clear();
+                    subTable.ColumnCount = 3;
+                    subTable.RowCount = 3;
+                    subTable.Controls.Clear();
+
+                    // Draw the nine boxes inside
+                    for (int row = 0; row < 3; row++)
+                    {
+                        subTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, (float)(100.0 / 3)));
+                        subTable.RowStyles.Add(new RowStyle(SizeType.Percent, (float)(100.0 / 3)));
+                        for (int col = 0; col < 3; col++)
+                        {
+                            TextBox newBox = makeTextBox(tableRow, tableCol);
+                            boxes[tableRow * 3 + row][tableCol * 3 + col] = newBox;
+                            subTable.Controls.Add(newBox, col, row);
+                        }
+                    }
+
                 }
             }
         }
@@ -73,12 +108,13 @@ namespace SuperSudoku
         {
             // Make a new textbox
             TextBox newBox = new TextBox();
+            newBox.BorderStyle = BorderStyle.None;
             newBox.Dock = DockStyle.Fill;
             newBox.Text = ""+row;
             newBox.Multiline = true; // Required to change height
             newBox.TextAlign = HorizontalAlignment.Center;
             newBox.MaxLength = 1;
-            newBox.Margin = new Padding(0);
+            newBox.Margin = new Padding(1);
             return newBox;
         }
 
