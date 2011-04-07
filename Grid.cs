@@ -39,7 +39,7 @@ namespace SuperSudoku
         /// </summary>
         public bool IsEditable(int row, int col)
         {
-            return Get(row, col) >= 0;
+            return elts[row][col] >= 0;
         }
 
         /// <summary>

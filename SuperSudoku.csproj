@@ -66,6 +66,12 @@
     <Compile Include="Generator.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="Solver.cs" />
+    <Compile Include="SudokuGridControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SudokuGridControl.Designer.cs">
+      <DependentUpon>SudokuGridControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="WelcomeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SudokuGridControl.resx">
+      <DependentUpon>SudokuGridControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WelcomeForm.resx">

@@ -45,9 +45,8 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hintBarText = new System.Windows.Forms.Label();
             this.solveButton = new System.Windows.Forms.Button();
-            this.sudokuGrid = new System.Windows.Forms.PictureBox();
+            this.gridPanel = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sudokuGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -193,33 +192,30 @@
             this.solveButton.Text = "Solve...";
             this.solveButton.UseVisualStyleBackColor = true;
             // 
-            // sudokuGrid
+            // gridPanel
             // 
-            this.sudokuGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.gridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.sudokuGrid.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.sudokuGrid.Location = new System.Drawing.Point(0, 40);
-            this.sudokuGrid.Name = "sudokuGrid";
-            this.sudokuGrid.Size = new System.Drawing.Size(466, 399);
-            this.sudokuGrid.TabIndex = 2;
-            this.sudokuGrid.TabStop = false;
+            this.gridPanel.Location = new System.Drawing.Point(12, 40);
+            this.gridPanel.Name = "gridPanel";
+            this.gridPanel.Size = new System.Drawing.Size(442, 399);
+            this.gridPanel.TabIndex = 5;
             // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(466, 490);
+            this.Controls.Add(this.gridPanel);
             this.Controls.Add(this.solveButton);
             this.Controls.Add(this.hintBarText);
-            this.Controls.Add(this.sudokuGrid);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "GameForm";
             this.Text = "Super Sudoku";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sudokuGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -244,6 +240,6 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Label hintBarText;
         private System.Windows.Forms.Button solveButton;
-        private System.Windows.Forms.PictureBox sudokuGrid;
+        private System.Windows.Forms.Panel gridPanel;
     }
 }

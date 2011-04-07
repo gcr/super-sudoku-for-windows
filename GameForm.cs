@@ -13,11 +13,15 @@ namespace SuperSudoku
     {
 
         private Grid grid;
+        private SudokuGridControl gcontrol;
 
         public GameForm(Grid grid)
         {
             InitializeComponent();
             this.grid = grid;
+            this.gcontrol = new SudokuGridControl(grid);
+            this.gridPanel.Controls.Add(gcontrol);
+            gcontrol.Dock = DockStyle.Fill;
         }
 
         private void FileNewGameClick(object sender, EventArgs e)
