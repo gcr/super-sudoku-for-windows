@@ -33,15 +33,15 @@
             // 
             // table
             // 
+            this.table.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.table.BackColor = System.Drawing.Color.DimGray;
             this.table.ColumnCount = 1;
             this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.table.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.table.Location = new System.Drawing.Point(0, 0);
+            this.table.Location = new System.Drawing.Point(31, 23);
             this.table.Name = "table";
             this.table.RowCount = 1;
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.table.Size = new System.Drawing.Size(150, 150);
+            this.table.Size = new System.Drawing.Size(88, 105);
             this.table.TabIndex = 0;
             // 
             // SudokuGridControl

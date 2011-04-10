@@ -20,7 +20,7 @@ namespace SuperSudoku
         }
         public SudokuGridControl(Grid bgrid)
         {
-            this.Resize += new EventHandler(FixFonts);
+            this.Resize += new EventHandler(FixFontsAndSize);
             this.ResizeRedraw = false;
             InitializeComponent();
 
@@ -29,7 +29,7 @@ namespace SuperSudoku
             ResetTextboxen();
             UpdateGridView();
 
-            FixFonts(new Object(), new EventArgs());
+            FixFontsAndSize(new Object(), new EventArgs());
 
         }
 
@@ -45,7 +45,7 @@ namespace SuperSudoku
         private void ResetTextboxen()
         {
             // ADD EIGHTY ONE TEXT BOXEN
-            table.Dock = DockStyle.Fill;
+            //table.Dock = DockStyle.Fill;
             table.Padding = new Padding(2);
             table.Margin = new Padding(0);
             table.RowStyles.Clear();
@@ -118,8 +118,16 @@ namespace SuperSudoku
             return newBox;
         }
 
-        private void FixFonts(object sender, EventArgs e)
+        private void FixFontsAndSize(object sender, EventArgs e)
         {
+            this.table.Size = new Size(
+                    Math.Min(this.Width, this.Height),
+                    Math.Min(this.Width, this.Height)
+                );
+            this.table.Location = new Point(
+                    this.Width / 2 - this.table.Width / 2,
+                    this.Height / 2 - this.table.Height / 2
+                );
             if (boxes != null)
             {
                 Font f = findSuitableFont(this.Width/9, this.Height / 9);
