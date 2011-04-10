@@ -70,6 +70,9 @@
     <Compile Include="SudokuGridControl.Designer.cs">
       <DependentUpon>SudokuGridControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="TabbityTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WelcomeForm.cs">
       <SubType>Form</SubType>
     </Compile>

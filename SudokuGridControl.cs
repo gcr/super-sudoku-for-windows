@@ -94,7 +94,7 @@ namespace SuperSudoku
                         subTable.RowStyles.Add(new RowStyle(SizeType.Percent, (float)(100.0 / 3)));
                         for (int col = 0; col < 3; col++)
                         {
-                            TextBox newBox = makeTextBox(tableRow, tableCol);
+                            TextBox newBox = makeTextBox(tableRow*3+row, tableCol*3+col);
                             boxes[tableRow * 3 + row][tableCol * 3 + col] = newBox;
                             subTable.Controls.Add(newBox, col, row);
                         }
@@ -104,18 +104,91 @@ namespace SuperSudoku
             }
         }
 
+        private void FocusBox(int row, int col)
+        {
+            int targetBox = (((row*9+col) % 81) + 81) % 81; // C# is stupid about negative modulo
+            int targetRow = targetBox/9;
+            int targetCol = targetBox % 9;
+            boxes[targetRow][targetCol].Focus();
+            boxes[targetRow][targetCol].SelectAll();
+        }
+
         private TextBox makeTextBox(int row, int col)
         {
             // Make a new textbox
-            TextBox newBox = new TextBox();
+            TextBox newBox = new TabbityTextBox();
             newBox.BorderStyle = BorderStyle.None;
             newBox.Dock = DockStyle.Fill;
-            newBox.Text = ""+row;
             newBox.Multiline = true; // Required to change height
             newBox.TextAlign = HorizontalAlignment.Center;
             newBox.MaxLength = 1;
             newBox.Margin = new Padding(1);
+            // Only allow digits
+            newBox.KeyPress += (object sender, KeyPressEventArgs e) =>
+            {
+                if (!char.IsControl(e.KeyChar)
+                    && !char.IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            };
+            newBox.TextChanged += (object Sender, EventArgs e) =>
+            {
+                if (newBox.Text != "")
+                {
+                    SetCell(row, col, Int16.Parse(newBox.Text));
+                    newBox.SelectAll();
+                }
+            };
+            // Change focus
+            newBox.KeyDown += (object sender, KeyEventArgs e) =>
+            {
+                switch (e.KeyData)
+                {
+                    case Keys.Down:
+                        FocusBox(row + 1, col);
+                        e.SuppressKeyPress = true;
+                        break;
+                    case Keys.Up:
+                        FocusBox(row - 1, col);
+                        e.SuppressKeyPress = true;
+                        break;
+                    case Keys.Tab | Keys.Shift:
+                    case Keys.Left:
+                        FocusBox(row, col-1);
+                        e.SuppressKeyPress = true;
+                        break;
+                    case Keys.Tab:
+                    case Keys.Enter:
+                    case Keys.Right:
+                        FocusBox(row, col+1);
+                        e.SuppressKeyPress = true;
+                        break;
+
+                    case Keys.Back:
+                    case Keys.Space:
+                    case Keys.Delete:
+                        ClearCell(row, col);
+                        e.SuppressKeyPress = true;
+                        break;
+                }
+            };
+
             return newBox;
+        }
+
+        private void ClearCell(int row, int col)
+        {
+            if (grid.IsEditable(row, col)) {
+                boxes[row][col].Text = "";
+            }
+        }
+
+        private void SetCell(int row, int col, int value)
+        {
+            if (grid.IsEditable(row, col)) {
+                grid.Set(value, true, row, col);
+            }
         }
 
         private void FixFontsAndSize(object sender, EventArgs e)
