@@ -20,6 +20,7 @@ namespace SuperSudoku
         {
             InitializeComponent();
             this.grid = grid;
+
             this.gcontrol = new SudokuGridControl(grid);
             this.gridPanel.Controls.Add(gcontrol);
             gcontrol.Dock = DockStyle.Fill;

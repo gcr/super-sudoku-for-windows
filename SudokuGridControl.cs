@@ -16,6 +16,7 @@ namespace SuperSudoku
         private Grid grid;
         private TextBox[][] boxes;
 
+        // Events: when the user selects, changes, and clears cells.
         private event GridEvent onSelect;
         private event GridEvent onChange;
         private event GridEvent onClear;
@@ -33,10 +34,10 @@ namespace SuperSudoku
             set { onClear = value; }
         }
         
-        public Grid BackingGrid
-        {
-            get { return grid; }
-        }
+        /// <summary>
+        /// This control is a sudoku grid control. It displays a sudoku grid
+        /// in an attractive way.
+        /// </summary>
         public SudokuGridControl(Grid bgrid)
         {
             this.Resize += new EventHandler(FixFontsAndSize);
@@ -52,6 +53,7 @@ namespace SuperSudoku
 
         }
 
+        // helper method
         private void ForEachTextBox(Action<TextBox, int, int> fun)
         {
             for (int i=0; i<boxes.Length; i++) {
@@ -61,10 +63,12 @@ namespace SuperSudoku
             }
         }
 
+        /// <summary>
+        /// Clear everything and re-add all text boxes
+        /// </summary>
         private void ResetTextboxen()
         {
             // ADD EIGHTY ONE TEXT BOXEN
-            //table.Dock = DockStyle.Fill;
             table.Padding = new Padding(2);
             table.Margin = new Padding(0);
             table.RowStyles.Clear();
@@ -113,7 +117,8 @@ namespace SuperSudoku
                         subTable.RowStyles.Add(new RowStyle(SizeType.Percent, (float)(100.0 / 3)));
                         for (int col = 0; col < 3; col++)
                         {
-                            TextBox newBox = makeTextBox(tableRow*3+row, tableCol*3+col);
+                            // Each box
+                            TextBox newBox = MakeTextBox(tableRow*3+row, tableCol*3+col);
                             boxes[tableRow * 3 + row][tableCol * 3 + col] = newBox;
                             subTable.Controls.Add(newBox, col, row);
                         }
@@ -123,7 +128,10 @@ namespace SuperSudoku
             }
         }
 
-        private TextBox makeTextBox(int row, int col)
+        /// <summary>
+        /// Generates a new textbox with the necessary event handlers
+        /// </summary>
+        private TextBox MakeTextBox(int row, int col)
         {
             // Make a new textbox
             TextBox newBox = new TabbityTextBox();
@@ -140,8 +148,9 @@ namespace SuperSudoku
             // Only allow digits
             newBox.KeyPress += (object sender, KeyPressEventArgs e) =>
             {
-                if (!char.IsControl(e.KeyChar)
+                if ((!char.IsControl(e.KeyChar)
                     && !char.IsDigit(e.KeyChar))
+                    || e.KeyChar == '0')
                 {
                     e.Handled = true;
                 }
@@ -151,7 +160,6 @@ namespace SuperSudoku
                 if (newBox.Text != "")
                 {
                     SetCell(row, col, Int16.Parse(newBox.Text));
-                    if (this.onChange != null) this.onChange(row, col);
                     newBox.SelectAll();
                 }
             };
@@ -192,6 +200,9 @@ namespace SuperSudoku
             return newBox;
         }
 
+        /// <summary>
+        /// Called when the box is focused
+        /// </summary>
         private void FocusBox(int row, int col)
         {
             int targetBox = (((row*9+col) % 81) + 81) % 81; // C# is stupid about negative modulo
@@ -201,6 +212,9 @@ namespace SuperSudoku
             boxes[targetRow][targetCol].SelectAll();
         }
 
+        /// <summary>
+        /// Called when the user tries to clear the text box
+        /// </summary>
         private void ClearCell(int row, int col)
         {
             if (grid.IsEditable(row, col)) {
@@ -210,13 +224,22 @@ namespace SuperSudoku
             }
         }
 
+
+        /// <summary>
+        ///  Called when the user changes the text box
+        /// </summary>
         private void SetCell(int row, int col, int value)
         {
             if (grid.IsEditable(row, col)) {
                 grid.Set(value, true, row, col);
+                if (this.onChange != null) this.onChange(row, col);
             }
         }
 
+        /// <summary>
+        /// Called as the control's resize handler, this function
+        /// picks good font sizes and fixes the grid location.
+        /// </summary>
         private void FixFontsAndSize(object sender, EventArgs e)
         {
             this.table.Size = new Size(
@@ -229,7 +252,7 @@ namespace SuperSudoku
                 );
             if (boxes != null)
             {
-                Font f = findSuitableFont(this.Width/9, this.Height / 9);
+                Font f = FindSuitableFont(this.Width/9, this.Height / 9);
                 ForEachTextBox((tbox, row, col) =>
                 {
                     tbox.Font = f;
@@ -238,9 +261,9 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// Find a good font that fits inside the bounding box
+        /// Find a good font that fits inside the given bounding box
         /// </summary>
-        private Font findSuitableFont(int targetWidth, int targetHeight)
+        private Font FindSuitableFont(int targetWidth, int targetHeight)
         {
             Graphics measurer = CreateGraphics();
 
@@ -260,6 +283,9 @@ namespace SuperSudoku
             return bestFont;
         }
 
+        /// <summary>
+        /// Causes this control to reflect the state of the grid.
+        /// </summary>
         private void UpdateGridView()
         {
             if (boxes != null)
@@ -269,15 +295,18 @@ namespace SuperSudoku
                     int boxVal = grid.Get(row, col);
                     tbox.Text = (boxVal != 0) ? ""+boxVal : "";
                     if (grid.IsEditable(row, col)) {
-                        makeCellEditable(row, col);
+                        MakeCellEditable(row, col);
                     } else {
-                        makeCellIneditable(row, col);
+                        MakeCellIneditable(row, col);
                     }
                 });
             }
         }
 
-        private void makeCellIneditable(int row, int col)
+        /// <summary>
+        /// Helper method -- makes the cell inedible
+        /// </summary>
+        private void MakeCellIneditable(int row, int col)
         {
             TextBox tbox = boxes[row][col];
             tbox.BackColor = Color.LightGray;
@@ -285,12 +314,29 @@ namespace SuperSudoku
             tbox.ReadOnly = true;
         }
 
-        private void makeCellEditable(int row, int col)
+        /// <summary>
+        /// Helper method -- make the cell editable again
+        /// </summary>
+        private void MakeCellEditable(int row, int col)
         {
             TextBox tbox = boxes[row][col];
             tbox.BackColor = Color.White;
             tbox.ForeColor = Color.Black;
             tbox.ReadOnly = false;
+        }
+
+        /// <summary>
+        /// Shows the given square in red.
+        /// </summary>
+        public void MarkError(int row, int col)
+        {
+            TextBox tbox = boxes[row][col];
+            tbox.ForeColor = Color.Red;
+        }
+
+        public void ClearErrors()
+        {
+            UpdateGridView();
         }
 
     }
