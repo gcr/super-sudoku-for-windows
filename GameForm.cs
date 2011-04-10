@@ -14,6 +14,7 @@ namespace SuperSudoku
 
         private Grid grid;
         private SudokuGridControl gcontrol;
+        private File fileWriter = new File();
 
         public GameForm(Grid grid)
         {
@@ -51,12 +52,29 @@ namespace SuperSudoku
 
         private void FileSaveGameClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Sudoku Game|*.sud";
+            dialog.Title = "Save Game";
+            dialog.ShowDialog();
+
+            fileWriter.WriteFile(grid, dialog.FileName);
         }
 
         private void FileSaveGameUnsolvedClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            Grid unsolvedGrid = grid.Copy();
+            unsolvedGrid.ForEachSquare((row,col,val) =>
+            {
+                if (grid.IsEditable(row,col)) {
+                    grid.Clear(row,col);
+                }
+            });
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Sudoku Game|*.sud";
+            dialog.Title = "Save Game";
+            dialog.ShowDialog();
+
+            fileWriter.WriteFile(unsolvedGrid, dialog.FileName);
         }
 
         private void FileLoadClick(object sender, EventArgs e)

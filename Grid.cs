@@ -178,5 +178,20 @@ namespace SuperSudoku
         {
             return new Grid(this.elts.Select((row) => (int[])row.Clone()).ToArray());
         }
+
+        /// <summary>
+        /// Apply the given action to each square in the grid.
+        /// </summary>
+        /// <param name="fun">Function that takes row, column, and current square.</param>
+        public void ForEachSquare(Action<int, int, int> fun)
+        {
+            for (int row = 0; row < 9; row++)
+            {
+                for (int col = 0; col < 9; col++)
+                {
+                    fun(row, col, Get(row, col));
+                }
+            }
+        }
     }
 }
