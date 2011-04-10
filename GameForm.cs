@@ -22,6 +22,21 @@ namespace SuperSudoku
             this.gcontrol = new SudokuGridControl(grid);
             this.gridPanel.Controls.Add(gcontrol);
             gcontrol.Dock = DockStyle.Fill;
+
+            gcontrol.CellClear += (int row, int col) =>
+            {
+                Console.WriteLine("Cleared grid row " + row + " col " + col);
+            };
+
+            gcontrol.CellChange += (int row, int col) =>
+            {
+                Console.WriteLine("Set grid " + row + "," + col + " to " + grid.Get(row, col));
+            };
+
+            gcontrol.CellFocused += (int row, int col) =>
+            {
+                Console.WriteLine("Selected grid " + row + "," + col);
+            };
         }
 
         private void FileNewGameClick(object sender, EventArgs e)

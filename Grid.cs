@@ -23,6 +23,14 @@ namespace SuperSudoku
         }
 
         /// <summary>
+        /// Clears the given cell, making it editable
+        /// </summary>
+        public void Clear(int row, int col)
+        {
+            elts[row][col] = 0;
+        }
+
+        /// <summary>
         /// Sets the value of row, col to the given value
         /// </summary>
         public void Set(int val, bool isEditable, int row, int col)
@@ -170,7 +178,5 @@ namespace SuperSudoku
         {
             return new Grid(this.elts.Select((row) => (int[])row.Clone()).ToArray());
         }
-
-        
     }
 }

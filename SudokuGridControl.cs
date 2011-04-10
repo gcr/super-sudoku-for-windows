@@ -11,8 +11,27 @@ namespace SuperSudoku
 {
     public partial class SudokuGridControl : UserControl
     {
+        public delegate void GridEvent(int row, int col);
+
         private Grid grid;
         private TextBox[][] boxes;
+
+        private event GridEvent onSelect;
+        private event GridEvent onChange;
+        private event GridEvent onClear;
+
+        public GridEvent CellFocused {
+            get { return onSelect; }
+            set { onSelect = value; }
+        }
+        public GridEvent CellChange {
+            get { return onChange; }
+            set { onChange = value; }
+        }
+        public GridEvent CellClear {
+            get { return onClear; }
+            set { onClear = value; }
+        }
         
         public Grid BackingGrid
         {
@@ -104,15 +123,6 @@ namespace SuperSudoku
             }
         }
 
-        private void FocusBox(int row, int col)
-        {
-            int targetBox = (((row*9+col) % 81) + 81) % 81; // C# is stupid about negative modulo
-            int targetRow = targetBox/9;
-            int targetCol = targetBox % 9;
-            boxes[targetRow][targetCol].Focus();
-            boxes[targetRow][targetCol].SelectAll();
-        }
-
         private TextBox makeTextBox(int row, int col)
         {
             // Make a new textbox
@@ -123,6 +133,10 @@ namespace SuperSudoku
             newBox.TextAlign = HorizontalAlignment.Center;
             newBox.MaxLength = 1;
             newBox.Margin = new Padding(1);
+            newBox.Enter += (object sender, EventArgs e) =>
+            {
+                if (this.onSelect != null) this.onSelect(row, col);
+            };
             // Only allow digits
             newBox.KeyPress += (object sender, KeyPressEventArgs e) =>
             {
@@ -137,6 +151,7 @@ namespace SuperSudoku
                 if (newBox.Text != "")
                 {
                     SetCell(row, col, Int16.Parse(newBox.Text));
+                    if (this.onChange != null) this.onChange(row, col);
                     newBox.SelectAll();
                 }
             };
@@ -177,10 +192,21 @@ namespace SuperSudoku
             return newBox;
         }
 
+        private void FocusBox(int row, int col)
+        {
+            int targetBox = (((row*9+col) % 81) + 81) % 81; // C# is stupid about negative modulo
+            int targetRow = targetBox/9;
+            int targetCol = targetBox % 9;
+            boxes[targetRow][targetCol].Focus();
+            boxes[targetRow][targetCol].SelectAll();
+        }
+
         private void ClearCell(int row, int col)
         {
             if (grid.IsEditable(row, col)) {
+                grid.Clear(row, col);
                 boxes[row][col].Text = "";
+                if (this.onClear != null) this.onClear(row, col);
             }
         }
 
