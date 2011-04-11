@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SuperSudoku
 {
-    class Solver
+    public class Solver
     {
 
         /// <summary>
@@ -39,15 +39,41 @@ namespace SuperSudoku
 
 
         /// <summary>
-        /// Returns true if the puzzle isn't obviously broken
+        /// Returns true if the puzzle isn't obviously broken.
         /// </summary>
         public bool IsValidPuzzle(Grid grid)
         {
-            // if (only one copy of each number in each row, column, square) {
-            //    return true;
-            // }
-            throw new NotImplementedException();
+            return FindErrors(grid).Count == 0;
         }
 
+        /// <summary>
+        /// Finds errors in the grid. Returns a list of cells where:
+        ///     - there is another cell with the same value in the row
+        ///     - there is another cell with the same value in the column
+        ///     - there is another cell with the same value in the 3x3 square
+        ///       where the cell resides
+        /// </summary>
+        public List<List<int>> FindErrors(Grid grid)
+        {
+            List<List<int>> errors = new List<List<int>>();
+            for (int row = 0; row < 9; row++)
+            {
+                for (int col = 0; col < 9; col++)
+                {
+                    int val = grid.Get(row, col);
+                    // The same cell in the row?
+                    bool valueInRow = grid.GetRow(row).Count((eachCell) => eachCell == val) > 1;
+                    // The same cell in the column?
+                    bool valueInCol = grid.GetColumn(col).Count((eachCell) => eachCell == val) > 1;
+                    // The same cell in the 3x3 square?
+                    bool valueInSquare = grid.GetSquareAbout(row, col).Count((eachCell) => eachCell == val) > 1;
+                    if (val != 0 && (valueInRow || valueInCol || valueInSquare))
+                    {
+                        errors.Add(new List<int>(new int[] { row, col }));
+                    }
+                }
+            }
+            return errors;
+        }
     }
 }

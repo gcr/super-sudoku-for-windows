@@ -133,8 +133,6 @@
             // 
             // alwaysShowHintsToolStripMenuItem
             // 
-            this.alwaysShowHintsToolStripMenuItem.Checked = true;
-            this.alwaysShowHintsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.alwaysShowHintsToolStripMenuItem.Name = "alwaysShowHintsToolStripMenuItem";
             this.alwaysShowHintsToolStripMenuItem.Size = new System.Drawing.Size(309, 34);
             this.alwaysShowHintsToolStripMenuItem.Text = "&Always Show Hints";
@@ -142,8 +140,6 @@
             // 
             // showErrorsToolStripMenuItem
             // 
-            this.showErrorsToolStripMenuItem.Checked = true;
-            this.showErrorsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showErrorsToolStripMenuItem.Name = "showErrorsToolStripMenuItem";
             this.showErrorsToolStripMenuItem.Size = new System.Drawing.Size(309, 34);
             this.showErrorsToolStripMenuItem.Text = "&Show Errors";

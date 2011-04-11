@@ -11,10 +11,12 @@ namespace SuperSudoku
 {
     public partial class GameForm : Form
     {
-
         private Grid grid;
         private SudokuGridControl gcontrol;
         private File fileWriter = new File();
+        private Solver solver = new Solver();
+
+        private bool showErrors = false;
 
         public GameForm(Grid grid)
         {
@@ -28,11 +30,13 @@ namespace SuperSudoku
             gcontrol.CellClear += (int row, int col) =>
             {
                 Console.WriteLine("Cleared grid row " + row + " col " + col);
+                RecalculateErrors();
             };
 
             gcontrol.CellChange += (int row, int col) =>
             {
                 Console.WriteLine("Set grid " + row + "," + col + " to " + grid.Get(row, col));
+                RecalculateErrors();
             };
 
             gcontrol.CellFocused += (int row, int col) =>
@@ -95,7 +99,9 @@ namespace SuperSudoku
 
         private void OptionsShowErrorsClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            showErrorsToolStripMenuItem.Checked = !showErrorsToolStripMenuItem.Checked;
+            showErrors = showErrorsToolStripMenuItem.Checked;
+            RecalculateErrors();
         }
 
         private void HelpRulesClick(object sender, EventArgs e)
@@ -106,6 +112,23 @@ namespace SuperSudoku
         private void HelpAboutClick(object sender, EventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Recalculates the errors
+        /// </summary>
+        private void RecalculateErrors()
+        {
+            gcontrol.ClearErrors();
+            if (showErrors)
+            {
+                foreach (List<int> sq in solver.FindErrors(grid))
+                {
+                    int row = sq[0];
+                    int col = sq[1];
+                    gcontrol.MarkError(row, col);
+                }
+            }
         }
     }
 }

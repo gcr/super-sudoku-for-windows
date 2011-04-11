@@ -293,7 +293,11 @@ namespace SuperSudoku
                 ForEachTextBox((tbox, row, col) =>
                 {
                     int boxVal = grid.Get(row, col);
-                    tbox.Text = (boxVal != 0) ? ""+boxVal : "";
+                    string text = (boxVal != 0) ? "" + boxVal : "";
+                    if (tbox.Text != text)
+                    {
+                        tbox.Text = text;
+                    }
                     if (grid.IsEditable(row, col)) {
                         MakeCellEditable(row, col);
                     } else {
