@@ -16,7 +16,7 @@ namespace SuperSudoku
         private File fileWriter = new File();
         private Solver solver = new Solver();
 
-        public GameForm(Grid grid)
+        public GameForm(Grid grid, bool playingMode)
         {
             InitializeComponent();
             this.grid = grid;
@@ -49,14 +49,14 @@ namespace SuperSudoku
             };
         }
 
-        private void FileNewGameClick(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private void FileEnterPuzzleClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("TODO: check for errors"); // NotImplementedException
+
+            this.Hide();
+            GameForm gform = new GameForm(new Grid(), true);
+            gform.ShowDialog();
+            this.Close();
         }
 
         private void FileSaveGameClick(object sender, EventArgs e)
@@ -66,7 +66,10 @@ namespace SuperSudoku
             dialog.Title = "Save Game";
             dialog.ShowDialog();
 
-            fileWriter.WriteFile(grid, dialog.FileName);
+            if (dialog.FileName != "")
+            {
+                fileWriter.WriteFile(grid, dialog.FileName);
+            }
         }
 
         private void FileSaveGameUnsolvedClick(object sender, EventArgs e)
@@ -83,12 +86,28 @@ namespace SuperSudoku
             dialog.Title = "Save Game";
             dialog.ShowDialog();
 
-            fileWriter.WriteFile(unsolvedGrid, dialog.FileName);
+            if (dialog.FileName != "")
+            {
+                fileWriter.WriteFile(unsolvedGrid, dialog.FileName);
+            }
         }
 
         private void FileLoadClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("TODO: check for errors"); // NotImplementedException
+            File fileOpener = new File();
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Sudoku Game|*.sud";
+            dialog.Title = "Load Game";
+            dialog.ShowDialog();
+
+            if (dialog.FileName != "")
+            {
+                this.Hide();
+                GameForm gform = new GameForm(fileOpener.ReadFile(dialog.FileName), true);
+                gform.ShowDialog();
+                this.Close();
+            }
         }
 
         private void FileQuitClick(object sender, EventArgs e)

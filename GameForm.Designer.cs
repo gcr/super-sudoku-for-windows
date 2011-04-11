@@ -30,7 +30,6 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterPuzzleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveGameUnsolvedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +63,6 @@
             // FileMenu
             // 
             this.FileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newGameToolStripMenuItem,
             this.enterPuzzleToolStripMenuItem,
             this.saveGameToolStripMenuItem,
             this.saveGameUnsolvedToolStripMenuItem,
@@ -75,18 +73,11 @@
             this.FileMenu.Size = new System.Drawing.Size(61, 33);
             this.FileMenu.Text = "&File";
             // 
-            // newGameToolStripMenuItem
-            // 
-            this.newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
-            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(335, 34);
-            this.newGameToolStripMenuItem.Text = "&New Game";
-            this.newGameToolStripMenuItem.Click += new System.EventHandler(this.FileNewGameClick);
-            // 
             // enterPuzzleToolStripMenuItem
             // 
             this.enterPuzzleToolStripMenuItem.Name = "enterPuzzleToolStripMenuItem";
             this.enterPuzzleToolStripMenuItem.Size = new System.Drawing.Size(335, 34);
-            this.enterPuzzleToolStripMenuItem.Text = "&Enter Puzzle";
+            this.enterPuzzleToolStripMenuItem.Text = "Enter &New Puzzle";
             this.enterPuzzleToolStripMenuItem.Click += new System.EventHandler(this.FileEnterPuzzleClick);
             // 
             // saveGameToolStripMenuItem
@@ -133,6 +124,8 @@
             // 
             // alwaysShowHintsToolStripMenuItem
             // 
+            this.alwaysShowHintsToolStripMenuItem.Checked = true;
+            this.alwaysShowHintsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.alwaysShowHintsToolStripMenuItem.Name = "alwaysShowHintsToolStripMenuItem";
             this.alwaysShowHintsToolStripMenuItem.Size = new System.Drawing.Size(309, 34);
             this.alwaysShowHintsToolStripMenuItem.Text = "&Always Show Hints";
@@ -140,6 +133,8 @@
             // 
             // showErrorsToolStripMenuItem
             // 
+            this.showErrorsToolStripMenuItem.Checked = true;
+            this.showErrorsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showErrorsToolStripMenuItem.Name = "showErrorsToolStripMenuItem";
             this.showErrorsToolStripMenuItem.Size = new System.Drawing.Size(309, 34);
             this.showErrorsToolStripMenuItem.Text = "&Show Errors";
@@ -221,7 +216,6 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem FileMenu;
-        private System.Windows.Forms.ToolStripMenuItem newGameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterPuzzleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveGameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveGameUnsolvedToolStripMenuItem;
