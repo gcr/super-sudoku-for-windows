@@ -16,10 +16,18 @@ namespace SuperSudoku
         private File fileWriter = new File();
         private Solver solver = new Solver();
 
+        private bool isPlaying;
+
+        /// <summary>
+        /// Creates a new form for playing the game
+        /// </summary>
+        /// <param name="grid">The grid to start with</param>
+        /// <param name="playingMode">If true: We're "playing" the game. If false: We're "editing" the game.</param>
         public GameForm(Grid grid, bool playingMode)
         {
             InitializeComponent();
             this.grid = grid;
+            this.isPlaying = playingMode;
 
             this.gcontrol = new SudokuGridControl(grid);
             this.gridPanel.Controls.Add(gcontrol);
@@ -112,7 +120,8 @@ namespace SuperSudoku
 
         private void FileQuitClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("TODO: check for errors"); // NotImplementedException
+            this.Close();
         }
 
         private void OptionsShowHintsClick(object sender, EventArgs e)
@@ -135,6 +144,11 @@ namespace SuperSudoku
         private void HelpAboutClick(object sender, EventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void SolveClick(object sender, EventArgs e)
+        {
+            throw NotImplementedException();
         }
 
         /// <summary>

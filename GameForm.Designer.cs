@@ -182,6 +182,7 @@
             this.solveButton.TabIndex = 4;
             this.solveButton.Text = "Solve...";
             this.solveButton.UseVisualStyleBackColor = true;
+            this.solveButton.Click += new System.EventHandler(this.SolveClick);
             // 
             // gridPanel
             // 
