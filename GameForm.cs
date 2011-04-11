@@ -31,17 +31,20 @@ namespace SuperSudoku
             {
                 Console.WriteLine("Cleared grid row " + row + " col " + col);
                 RecalculateErrors();
+                RecalculateHints(row, col);
             };
 
             gcontrol.CellChange += (int row, int col) =>
             {
                 Console.WriteLine("Set grid " + row + "," + col + " to " + grid.Get(row, col));
                 RecalculateErrors();
+                RecalculateHints(row, col);
             };
 
             gcontrol.CellFocused += (int row, int col) =>
             {
                 Console.WriteLine("Selected grid " + row + "," + col);
+                RecalculateHints(row, col);
             };
         }
 
@@ -129,6 +132,15 @@ namespace SuperSudoku
                     gcontrol.MarkError(row, col);
                 }
             }
+        }
+
+        /// <summary>
+        /// Recalculate the hints bar
+        /// </summary>
+        private void RecalculateHints(int row, int col)
+        {
+            List<int> hints = solver.GetHintsFor(grid, row, col);
+            hintBarText.Text = "Hints: " + String.Join(",", hints.Select((i)=>""+i).ToArray());
         }
     }
 }

@@ -32,9 +32,18 @@ namespace SuperSudoku
         /// <returns>
         /// A list of valid move choices.
         /// </returns>
-        public int[] GetHintsFor(Grid grid, int row, int col)
+        public List<int> GetHintsFor(Grid grid, int row, int col)
         {
-            throw new NotImplementedException();
+            var occupiedSquares = grid.GetColumn(col).Concat(grid.GetRow(row)).Concat(grid.GetSquareAbout(row, col));
+            List<int> results = new List<int>();
+            for (int i = 1; i <= 9; i++)
+            {
+                if (!occupiedSquares.Contains(i))
+                {
+                    results.Add(i);
+                }
+            }
+            return results;
         }
 
 
