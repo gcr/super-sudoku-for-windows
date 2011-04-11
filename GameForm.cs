@@ -16,8 +16,6 @@ namespace SuperSudoku
         private File fileWriter = new File();
         private Solver solver = new Solver();
 
-        private bool showErrors = false;
-
         public GameForm(Grid grid)
         {
             InitializeComponent();
@@ -32,6 +30,7 @@ namespace SuperSudoku
                 Console.WriteLine("Cleared grid row " + row + " col " + col);
                 RecalculateErrors();
                 RecalculateHints(row, col);
+                ShowOrHideHintBar();
             };
 
             gcontrol.CellChange += (int row, int col) =>
@@ -39,12 +38,14 @@ namespace SuperSudoku
                 Console.WriteLine("Set grid " + row + "," + col + " to " + grid.Get(row, col));
                 RecalculateErrors();
                 RecalculateHints(row, col);
+                ShowOrHideHintBar();
             };
 
             gcontrol.CellFocused += (int row, int col) =>
             {
                 Console.WriteLine("Selected grid " + row + "," + col);
                 RecalculateHints(row, col);
+                ShowOrHideHintBar();
             };
         }
 
@@ -97,13 +98,13 @@ namespace SuperSudoku
 
         private void OptionsShowHintsClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            alwaysShowHintsToolStripMenuItem.Checked = !alwaysShowHintsToolStripMenuItem.Checked;
+            ShowOrHideHintBar();
         }
 
         private void OptionsShowErrorsClick(object sender, EventArgs e)
         {
             showErrorsToolStripMenuItem.Checked = !showErrorsToolStripMenuItem.Checked;
-            showErrors = showErrorsToolStripMenuItem.Checked;
             RecalculateErrors();
         }
 
@@ -123,7 +124,7 @@ namespace SuperSudoku
         private void RecalculateErrors()
         {
             gcontrol.ClearErrors();
-            if (showErrors)
+            if (showErrorsToolStripMenuItem.Checked)
             {
                 foreach (List<int> sq in solver.FindErrors(grid))
                 {
@@ -132,6 +133,14 @@ namespace SuperSudoku
                     gcontrol.MarkError(row, col);
                 }
             }
+        }
+
+        /// <summary>
+        /// Shows or hides the hints bar
+        /// </summary>
+        private void ShowOrHideHintBar()
+        {
+            hintBarText.Visible = alwaysShowHintsToolStripMenuItem.Checked;
         }
 
         /// <summary>
