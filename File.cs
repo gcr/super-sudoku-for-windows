@@ -8,15 +8,17 @@ namespace SuperSudoku
     class File
     {
         /// <summary>
-        /// Reads a file and returns the grid stored inside.
+        /// Takes as input a 9x9 integer grid array and a file name,
+        /// and returns true if successful in reading the named file.
         /// </summary>
-        public Grid ReadFile(string fileName)
+        public void ReadFile(Grid grid, string fileName)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Saves the given grid into a file with the given file name.
+        /// Takes as input a 9x9 integer grid array and a file name,
+        /// and returns true if successful in writing the named file.
         /// </summary>
         public void WriteFile(Grid grid, string fileName)
         {
