@@ -55,8 +55,17 @@ namespace SuperSudoku
                 RecalculateHints(row, col);
                 ShowOrHideHintBar();
             };
+
+            gcontrol.ForEachTextBox((TextBox tbox, int row, int col) =>
+            {
+                tbox.ContextMenu = new ContextMenu();
+                //for (MenuItem mnu in contextMenu.
+            });
         }
 
+        /// <summary>
+        /// When the File -> Enter New Puzzle menu is chosen
+        /// </summary>
         private void FileEnterPuzzleClick(object sender, EventArgs e)
         {
             MessageBox.Show("TODO: check for errors"); // NotImplementedException
@@ -67,6 +76,9 @@ namespace SuperSudoku
             this.Close();
         }
 
+        /// <summary>
+        /// When the File -> "Save Game" menu item is chosen
+        /// </summary>
         private void FileSaveGameClick(object sender, EventArgs e)
         {
             SaveFileDialog dialog = new SaveFileDialog();
@@ -80,6 +92,9 @@ namespace SuperSudoku
             }
         }
 
+        /// <summary>
+        /// When the File -> Save Game Unsolved menu item is chosen
+        /// </summary>
         private void FileSaveGameUnsolvedClick(object sender, EventArgs e)
         {
             Grid unsolvedGrid = grid.Copy();
@@ -100,6 +115,9 @@ namespace SuperSudoku
             }
         }
 
+        /// <summary>
+        /// When the File -> Load Game menu item is chosen, load a new game
+        /// </summary>
         private void FileLoadClick(object sender, EventArgs e)
         {
             MessageBox.Show("TODO: check for errors"); // NotImplementedException
@@ -112,47 +130,67 @@ namespace SuperSudoku
             if (dialog.FileName != "")
             {
                 this.Hide();
-                GameForm gform = new GameForm(fileOpener.ReadFile(dialog.FileName), true);
+                Grid newGrid = new Grid();
+                fileOpener.ReadFile(grid, dialog.FileName);
+                GameForm gform = new GameForm(newGrid, true);
                 gform.ShowDialog();
                 this.Close();
             }
         }
 
+        /// <summary>
+        /// When the File -> Quit menu item is chosen
+        /// </summary>
         private void FileQuitClick(object sender, EventArgs e)
         {
             MessageBox.Show("TODO: check for errors"); // NotImplementedException
             this.Close();
         }
 
+        /// <summary>
+        /// When the Options -> Show Hints menu item is chosen
+        /// </summary>
         private void OptionsShowHintsClick(object sender, EventArgs e)
         {
             alwaysShowHintsToolStripMenuItem.Checked = !alwaysShowHintsToolStripMenuItem.Checked;
             ShowOrHideHintBar();
         }
 
+        /// <summary>
+        /// When the Options -> Show ERrors menu item is chosen
+        /// </summary>
         private void OptionsShowErrorsClick(object sender, EventArgs e)
         {
             showErrorsToolStripMenuItem.Checked = !showErrorsToolStripMenuItem.Checked;
             RecalculateErrors();
         }
 
+        /// <summary>
+        /// When the Help -> Sudoku Rules menu item is chosen
+        /// </summary>
         private void HelpRulesClick(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// When the Help -> About menu item is chosen
+        /// </summary>
         private void HelpAboutClick(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// When the Solve button is clicked
+        /// </summary>
         private void SolveClick(object sender, EventArgs e)
         {
-            throw NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Recalculates the errors
+        /// Recalculates the errors on the grid, show them as red
         /// </summary>
         private void RecalculateErrors()
         {
@@ -177,7 +215,7 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// Recalculate the hints bar
+        /// Recalculate the hints in the hints bar
         /// </summary>
         private void RecalculateHints(int row, int col)
         {

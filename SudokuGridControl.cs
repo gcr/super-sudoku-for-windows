@@ -54,7 +54,7 @@ namespace SuperSudoku
         }
 
         // helper method
-        private void ForEachTextBox(Action<TextBox, int, int> fun)
+        public void ForEachTextBox(Action<TextBox, int, int> fun)
         {
             for (int i=0; i<boxes.Length; i++) {
                 for (int j=0; j<boxes[i].Length; j++) {

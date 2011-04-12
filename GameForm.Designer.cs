@@ -45,6 +45,9 @@
             this.hintBarText = new System.Windows.Forms.Label();
             this.solveButton = new System.Windows.Forms.Button();
             this.gridPanel = new System.Windows.Forms.Panel();
+            this.contextMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.showHintsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.solveThisSquareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +56,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenu,
             this.optionsToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.contextMenu});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(466, 37);
@@ -194,6 +198,28 @@
             this.gridPanel.Size = new System.Drawing.Size(442, 399);
             this.gridPanel.TabIndex = 5;
             // 
+            // contextMenu
+            // 
+            this.contextMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showHintsToolStripMenuItem,
+            this.solveThisSquareToolStripMenuItem});
+            this.contextMenu.Name = "contextMenu";
+            this.contextMenu.Size = new System.Drawing.Size(121, 33);
+            this.contextMenu.Text = "(context)";
+            this.contextMenu.Visible = false;
+            // 
+            // showHintsToolStripMenuItem
+            // 
+            this.showHintsToolStripMenuItem.Name = "showHintsToolStripMenuItem";
+            this.showHintsToolStripMenuItem.Size = new System.Drawing.Size(299, 34);
+            this.showHintsToolStripMenuItem.Text = "Show &Hints";
+            // 
+            // solveThisSquareToolStripMenuItem
+            // 
+            this.solveThisSquareToolStripMenuItem.Name = "solveThisSquareToolStripMenuItem";
+            this.solveThisSquareToolStripMenuItem.Size = new System.Drawing.Size(299, 34);
+            this.solveThisSquareToolStripMenuItem.Text = "&Solve This Square";
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -232,5 +258,8 @@
         private System.Windows.Forms.Label hintBarText;
         private System.Windows.Forms.Button solveButton;
         private System.Windows.Forms.Panel gridPanel;
+        private System.Windows.Forms.ToolStripMenuItem contextMenu;
+        private System.Windows.Forms.ToolStripMenuItem showHintsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem solveThisSquareToolStripMenuItem;
     }
 }

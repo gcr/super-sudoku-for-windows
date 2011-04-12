@@ -54,7 +54,9 @@ namespace SuperSudoku
             if (dialog.FileName != "")
             {
                 this.Hide();
-                GameForm gform = new GameForm(fileOpener.ReadFile(dialog.FileName), true);
+                Grid newGrid = new Grid();
+                fileOpener.ReadFile(newGrid, dialog.FileName);
+                GameForm gform = new GameForm(newGrid, true);
                 gform.ShowDialog();
                 this.Close();
             }
