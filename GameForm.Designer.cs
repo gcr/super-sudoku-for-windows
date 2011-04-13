@@ -30,7 +30,6 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterPuzzleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveGameUnsolvedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +45,9 @@
             this.hintBarText = new System.Windows.Forms.Label();
             this.solveButton = new System.Windows.Forms.Button();
             this.gridPanel = new System.Windows.Forms.Panel();
+            this.contextMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.showHintsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.solveThisSquareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,7 +56,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenu,
             this.optionsToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.contextMenu});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(466, 37);
@@ -64,7 +67,6 @@
             // FileMenu
             // 
             this.FileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newGameToolStripMenuItem,
             this.enterPuzzleToolStripMenuItem,
             this.saveGameToolStripMenuItem,
             this.saveGameUnsolvedToolStripMenuItem,
@@ -75,18 +77,11 @@
             this.FileMenu.Size = new System.Drawing.Size(61, 33);
             this.FileMenu.Text = "&File";
             // 
-            // newGameToolStripMenuItem
-            // 
-            this.newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
-            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(335, 34);
-            this.newGameToolStripMenuItem.Text = "&New Game";
-            this.newGameToolStripMenuItem.Click += new System.EventHandler(this.FileNewGameClick);
-            // 
             // enterPuzzleToolStripMenuItem
             // 
             this.enterPuzzleToolStripMenuItem.Name = "enterPuzzleToolStripMenuItem";
             this.enterPuzzleToolStripMenuItem.Size = new System.Drawing.Size(335, 34);
-            this.enterPuzzleToolStripMenuItem.Text = "&Enter Puzzle";
+            this.enterPuzzleToolStripMenuItem.Text = "Enter &New Puzzle";
             this.enterPuzzleToolStripMenuItem.Click += new System.EventHandler(this.FileEnterPuzzleClick);
             // 
             // saveGameToolStripMenuItem
@@ -133,6 +128,8 @@
             // 
             // alwaysShowHintsToolStripMenuItem
             // 
+            this.alwaysShowHintsToolStripMenuItem.Checked = true;
+            this.alwaysShowHintsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.alwaysShowHintsToolStripMenuItem.Name = "alwaysShowHintsToolStripMenuItem";
             this.alwaysShowHintsToolStripMenuItem.Size = new System.Drawing.Size(309, 34);
             this.alwaysShowHintsToolStripMenuItem.Text = "&Always Show Hints";
@@ -140,6 +137,8 @@
             // 
             // showErrorsToolStripMenuItem
             // 
+            this.showErrorsToolStripMenuItem.Checked = true;
+            this.showErrorsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showErrorsToolStripMenuItem.Name = "showErrorsToolStripMenuItem";
             this.showErrorsToolStripMenuItem.Size = new System.Drawing.Size(309, 34);
             this.showErrorsToolStripMenuItem.Text = "&Show Errors";
@@ -187,6 +186,7 @@
             this.solveButton.TabIndex = 4;
             this.solveButton.Text = "Solve...";
             this.solveButton.UseVisualStyleBackColor = true;
+            this.solveButton.Click += new System.EventHandler(this.SolveClick);
             // 
             // gridPanel
             // 
@@ -197,6 +197,28 @@
             this.gridPanel.Name = "gridPanel";
             this.gridPanel.Size = new System.Drawing.Size(442, 399);
             this.gridPanel.TabIndex = 5;
+            // 
+            // contextMenu
+            // 
+            this.contextMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showHintsToolStripMenuItem,
+            this.solveThisSquareToolStripMenuItem});
+            this.contextMenu.Name = "contextMenu";
+            this.contextMenu.Size = new System.Drawing.Size(121, 33);
+            this.contextMenu.Text = "(context)";
+            this.contextMenu.Visible = false;
+            // 
+            // showHintsToolStripMenuItem
+            // 
+            this.showHintsToolStripMenuItem.Name = "showHintsToolStripMenuItem";
+            this.showHintsToolStripMenuItem.Size = new System.Drawing.Size(299, 34);
+            this.showHintsToolStripMenuItem.Text = "Show &Hints";
+            // 
+            // solveThisSquareToolStripMenuItem
+            // 
+            this.solveThisSquareToolStripMenuItem.Name = "solveThisSquareToolStripMenuItem";
+            this.solveThisSquareToolStripMenuItem.Size = new System.Drawing.Size(299, 34);
+            this.solveThisSquareToolStripMenuItem.Text = "&Solve This Square";
             // 
             // GameForm
             // 
@@ -221,7 +243,6 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem FileMenu;
-        private System.Windows.Forms.ToolStripMenuItem newGameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterPuzzleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveGameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveGameUnsolvedToolStripMenuItem;
@@ -237,5 +258,8 @@
         private System.Windows.Forms.Label hintBarText;
         private System.Windows.Forms.Button solveButton;
         private System.Windows.Forms.Panel gridPanel;
+        private System.Windows.Forms.ToolStripMenuItem contextMenu;
+        private System.Windows.Forms.ToolStripMenuItem showHintsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem solveThisSquareToolStripMenuItem;
     }
 }

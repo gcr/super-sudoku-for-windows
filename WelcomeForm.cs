@@ -11,6 +11,7 @@ namespace SuperSudoku
 {
     public partial class WelcomeForm : Form
     {
+
         public WelcomeForm()
         {
             InitializeComponent();
@@ -25,7 +26,7 @@ namespace SuperSudoku
             {
                 this.Hide();
                 gen.Generate(dform.Result);
-                GameForm gform = new GameForm(gen.SolutionGrid);
+                GameForm gform = new GameForm(gen.SolutionGrid, true);
                 gform.ShowDialog();
                 this.Close();
             }
@@ -37,14 +38,28 @@ namespace SuperSudoku
         private void editButton_Click(object sender, EventArgs e)
         {
             this.Hide();
-            GameForm gform = new GameForm(new Grid());
+            GameForm gform = new GameForm(new Grid(), false);
             gform.ShowDialog();
             this.Close();
         }
 
         private void loadButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            File fileOpener = new File();
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Sudoku Game|*.sud";
+            dialog.Title = "Load Game";
+            dialog.ShowDialog();
+
+            if (dialog.FileName != "")
+            {
+                this.Hide();
+                Grid newGrid = new Grid();
+                fileOpener.ReadFile(newGrid, dialog.FileName);
+                GameForm gform = new GameForm(newGrid, true);
+                gform.ShowDialog();
+                this.Close();
+            }
         }
     }
 }
