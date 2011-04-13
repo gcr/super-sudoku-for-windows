@@ -17,7 +17,7 @@ namespace SuperSudoku
         /// Takes as input a 9x9 integer grid array and a file name,
         /// and returns true if successful in reading the named file.
         /// </summary>
-        public void ReadFile(Grid grid, string fileName)
+        public bool ReadFile(Grid grid, string fileName)
         {
             try
             {
@@ -43,12 +43,14 @@ namespace SuperSudoku
                         }
                     }
                 }
+                return true;
             }
             catch (Exception e)
             {
                 // Let the user know what went wrong.
                 MessageBox.Show("The file could not be read.");
                 MessageBox.Show(e.Message);
+                return false;
             }
         }
 
@@ -56,21 +58,31 @@ namespace SuperSudoku
         /// Takes as input a 9x9 integer grid array and a file name,
         /// and returns true if successful in writing the named file.
         /// </summary>
-        public void WriteFile(Grid grid, string fileName)
+        public bool WriteFile(Grid grid, string fileName)
         {
             try
             {
                 // Write the string to a file.
                 System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
-                file.WriteLine("0+1+2+3+4-5+6+7-8+");
-
+                string line = "";
+                for (int i = 1; i < 10; i++)
+                {
+                    
+                    for (int j = 1; j < 10; j++)
+                    {
+                        line += grid.Get(i, j);
+                    }
+                    file.WriteLine(line);
+                }
                 file.Close();
+                return true;
             }
             catch (Exception e)
             {
                 // Let the user know what went wrong.
                 MessageBox.Show("The file could not be written.");
                 MessageBox.Show(e.Message);
+                return false;
             }
         }
 
