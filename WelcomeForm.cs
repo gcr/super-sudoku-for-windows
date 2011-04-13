@@ -19,17 +19,7 @@ namespace SuperSudoku
 
         private void generateButton_Click(object sender, EventArgs e)
         {
-            DifficultyForm dform = new DifficultyForm();
-            Generator gen = new Generator();
-            dform.ShowDialog();
-            if (dform.HasResult)
-            {
-                this.Hide();
-                gen.Generate(dform.Result);
-                GameForm gform = new GameForm(gen.SolutionGrid, true);
-                gform.ShowDialog();
-                this.Close();
-            }
+            GameManager.GeneratePuzzle(this);
         }
 
         /// <summary>
@@ -37,29 +27,12 @@ namespace SuperSudoku
         /// </summary>
         private void editButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            GameForm gform = new GameForm(new Grid(), false);
-            gform.ShowDialog();
-            this.Close();
+            GameManager.EnterNewPuzzle(this);
         }
 
         private void loadButton_Click(object sender, EventArgs e)
         {
-            File fileOpener = new File();
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Sudoku Game|*.sud";
-            dialog.Title = "Load Game";
-            dialog.ShowDialog();
-
-            if (dialog.FileName != "")
-            {
-                this.Hide();
-                Grid newGrid = new Grid();
-                fileOpener.ReadFile(newGrid, dialog.FileName);
-                GameForm gform = new GameForm(newGrid, true);
-                gform.ShowDialog();
-                this.Close();
-            }
+            GameManager.LoadGame(this);
         }
     }
 }

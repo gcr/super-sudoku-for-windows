@@ -201,7 +201,7 @@
             this.generateNewPuzzleToolStripMenuItem.Name = "generateNewPuzzleToolStripMenuItem";
             this.generateNewPuzzleToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
             this.generateNewPuzzleToolStripMenuItem.Text = "&Generate New Puzzle";
-            this.generateNewPuzzleToolStripMenuItem.Click += new System.EventHandler(this.generateNewPuzzleClick);
+            this.generateNewPuzzleToolStripMenuItem.Click += new System.EventHandler(this.FileGenerateNewPuzzleClick);
             // 
             // GameForm
             // 

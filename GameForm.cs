@@ -14,7 +14,6 @@ namespace SuperSudoku
         private Grid grid;
         private Grid solvedGrid;
         private SudokuGridControl gcontrol;
-        private File fileWriter = new File();
         private Solver solver = new Solver();
 
         private bool isPlaying;
@@ -92,39 +91,18 @@ namespace SuperSudoku
         /// <summary>
         /// When the File -> Generate New Puzzle menu item is clicked
         /// </summary>
-        private void generateNewPuzzleClick(object sender, EventArgs e)
+        private void FileGenerateNewPuzzleClick(object sender, EventArgs e)
         {
-            bool abortNewGame = false;
             if (MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.Filter = "Sudoku Game|*.sud";
-                dialog.Title = "Save Game";
-                dialog.ShowDialog();
-
-                if (dialog.FileName != "")
+                if (GameManager.SaveGame(grid))
                 {
-                    fileWriter.WriteFile(grid, dialog.FileName);
-                }
-                else
-                {
-                    abortNewGame = true;
+                    GameManager.GeneratePuzzle(this);
                 }
             }
-
-            if (!abortNewGame)
+            else
             {
-                DifficultyForm dform = new DifficultyForm();
-                Generator gen = new Generator();
-                dform.ShowDialog();
-                if (dform.HasResult)
-                {
-                    this.Hide();
-                    gen.Generate(dform.Result);
-                    GameForm gform = new GameForm(gen.SolutionGrid, true);
-                    gform.ShowDialog();
-                    this.Close();
-                }
+                GameManager.GeneratePuzzle(this);
             }
         }
 
@@ -135,10 +113,7 @@ namespace SuperSudoku
         {
             MessageBox.Show("TODO: check for errors"); // NotImplementedException
 
-            this.Hide();
-            GameForm gform = new GameForm(new Grid(), true);
-            gform.ShowDialog();
-            this.Close();
+            GameManager.EnterNewPuzzle(this);
         }
 
         /// <summary>
@@ -146,15 +121,7 @@ namespace SuperSudoku
         /// </summary>
         private void FileSaveGameClick(object sender, EventArgs e)
         {
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "Sudoku Game|*.sud";
-            dialog.Title = "Save Game";
-            dialog.ShowDialog();
-
-            if (dialog.FileName != "")
-            {
-                fileWriter.WriteFile(grid, dialog.FileName);
-            }
+            GameManager.SaveGame(grid);
         }
 
         /// <summary>
@@ -169,15 +136,7 @@ namespace SuperSudoku
                     grid.Clear(row,col);
                 }
             });
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "Sudoku Game|*.sud";
-            dialog.Title = "Save Game";
-            dialog.ShowDialog();
-
-            if (dialog.FileName != "")
-            {
-                fileWriter.WriteFile(unsolvedGrid, dialog.FileName);
-            }
+            GameManager.SaveGame(unsolvedGrid);
         }
 
         /// <summary>
@@ -186,21 +145,7 @@ namespace SuperSudoku
         private void FileLoadClick(object sender, EventArgs e)
         {
             MessageBox.Show("TODO: check for errors"); // NotImplementedException
-            File fileOpener = new File();
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Sudoku Game|*.sud";
-            dialog.Title = "Load Game";
-            dialog.ShowDialog();
-
-            if (dialog.FileName != "")
-            {
-                this.Hide();
-                Grid newGrid = new Grid();
-                fileOpener.ReadFile(grid, dialog.FileName);
-                GameForm gform = new GameForm(newGrid, true);
-                gform.ShowDialog();
-                this.Close();
-            }
+            GameManager.LoadGame(this);
         }
 
         /// <summary>

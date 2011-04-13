@@ -63,6 +63,7 @@
     <Compile Include="GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameManager.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="Solver.cs" />
