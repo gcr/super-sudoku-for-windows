@@ -186,7 +186,8 @@ namespace SuperSudoku
         /// </summary>
         private void SolveClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            solver.Solve(grid);
+            gcontrol.UpdateGridView();
         }
 
         /// <summary>

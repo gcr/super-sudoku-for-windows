@@ -286,7 +286,7 @@ namespace SuperSudoku
         /// <summary>
         /// Causes this control to reflect the state of the grid.
         /// </summary>
-        private void UpdateGridView()
+        public void UpdateGridView()
         {
             if (boxes != null)
             {
