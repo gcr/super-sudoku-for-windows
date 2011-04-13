@@ -67,10 +67,16 @@ namespace SuperSudoku
                 string line = "";
                 for (int i = 1; i < 10; i++)
                 {
-                    
                     for (int j = 1; j < 10; j++)
                     {
-                        line += grid.Get(i, j);
+                        line += Math.Abs(grid.Get(i-1, j-1)+48);
+                        if (grid.Get(i - 1, j - 1) < 0)
+                        {
+                            line += '-';
+                        }
+                        else{
+                            line += '+';
+                        }
                     }
                     file.WriteLine(line);
                 }
