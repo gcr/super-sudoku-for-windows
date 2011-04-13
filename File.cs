@@ -64,12 +64,12 @@ namespace SuperSudoku
             {
                 // Write the string to a file.
                 System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
-                string line = "";
                 for (int i = 1; i < 10; i++)
                 {
+                    string line = "";
                     for (int j = 1; j < 10; j++)
                     {
-                        line += Math.Abs(grid.Get(i-1, j-1)+48);
+                        line += Math.Abs(grid.Get(i-1, j-1))+48;
                         if (grid.Get(i - 1, j - 1) < 0)
                         {
                             line += '-';
