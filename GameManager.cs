@@ -12,6 +12,11 @@ namespace SuperSudoku
     /// </summary>
     public class GameManager
     {
+        /// <summary>
+        /// Shows a dialog for saving the grid you pass.
+        /// </summary>
+        /// <param name="grid">The grid to be saved</param>
+        /// <returns>Whether the save succeeded. False if the user canceled.</returns>
         public static bool SaveGame(Grid grid)
         {
             bool result = false;
@@ -28,6 +33,10 @@ namespace SuperSudoku
             return result;
         }
 
+        /// <summary>
+        /// Loads a game from disk (showing load dialog) and then shows the game form.
+        /// </summary>
+        /// <param name="form">This form will be hidden.</param>
         public static bool LoadGame(Form form)
         {
             bool result = false;
@@ -50,6 +59,10 @@ namespace SuperSudoku
             return result;
         }
 
+        /// <summary>
+        /// Shows the dialog for creating a puzzle. May also show the new game screen.
+        /// </summary>
+        /// <param name="form">This form will be hidden.</param>
         public static void GeneratePuzzle(Form form)
         {
             DifficultyForm dform = new DifficultyForm();
@@ -65,6 +78,10 @@ namespace SuperSudoku
             }
         }
 
+        /// <summary>
+        /// Shows a blank game screen.
+        /// </summary>
+        /// <param name="form">This form will be hidden.</param>
         public static void EnterNewPuzzle(Form form)
         {
             form.Hide();
