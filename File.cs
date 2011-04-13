@@ -28,9 +28,19 @@ namespace SuperSudoku
                     String line;
                     // Read and display lines from the file until the end of
                     // the file is reached.
-                    while ((line = sr.ReadLine()) != null)
+                    for (int i=1;i<10;i++)
                     {
-                        MessageBox.Show(line);
+                        line= sr.ReadLine();
+                        for (int j = 1; j < 10; j++)
+                        {
+                            if (line[2 * (j - 1) + 1] == '-')
+                            {
+                                grid.Set(-line[2 * (j - 1)] - 48, true, i, j);
+                            }
+                            else {
+                                grid.Set(line[2 * (i - 1)] - 48, false, i, j);
+                            }
+                        }
                     }
                 }
             }
