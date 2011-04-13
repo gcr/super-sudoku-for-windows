@@ -45,6 +45,7 @@
             this.gameRulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.generateNewPuzzleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -82,6 +83,7 @@
             // FileMenu
             // 
             this.FileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.generateNewPuzzleToolStripMenuItem,
             this.enterPuzzleToolStripMenuItem,
             this.saveGameToolStripMenuItem,
             this.saveGameUnsolvedToolStripMenuItem,
@@ -95,40 +97,40 @@
             // enterPuzzleToolStripMenuItem
             // 
             this.enterPuzzleToolStripMenuItem.Name = "enterPuzzleToolStripMenuItem";
-            this.enterPuzzleToolStripMenuItem.Size = new System.Drawing.Size(335, 34);
+            this.enterPuzzleToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
             this.enterPuzzleToolStripMenuItem.Text = "Enter &New Puzzle";
             this.enterPuzzleToolStripMenuItem.Click += new System.EventHandler(this.FileEnterPuzzleClick);
             // 
             // saveGameToolStripMenuItem
             // 
             this.saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
-            this.saveGameToolStripMenuItem.Size = new System.Drawing.Size(335, 34);
+            this.saveGameToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
             this.saveGameToolStripMenuItem.Text = "&Save Game";
             this.saveGameToolStripMenuItem.Click += new System.EventHandler(this.FileSaveGameClick);
             // 
             // saveGameUnsolvedToolStripMenuItem
             // 
             this.saveGameUnsolvedToolStripMenuItem.Name = "saveGameUnsolvedToolStripMenuItem";
-            this.saveGameUnsolvedToolStripMenuItem.Size = new System.Drawing.Size(335, 34);
+            this.saveGameUnsolvedToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
             this.saveGameUnsolvedToolStripMenuItem.Text = "Save Game &Unsolved";
             this.saveGameUnsolvedToolStripMenuItem.Click += new System.EventHandler(this.FileSaveGameUnsolvedClick);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(335, 34);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
             this.loadToolStripMenuItem.Text = "&Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.FileLoadClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(332, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(334, 6);
             // 
             // quitGameToolStripMenuItem
             // 
             this.quitGameToolStripMenuItem.Name = "quitGameToolStripMenuItem";
-            this.quitGameToolStripMenuItem.Size = new System.Drawing.Size(335, 34);
+            this.quitGameToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
             this.quitGameToolStripMenuItem.Text = "&Quit Game";
             this.quitGameToolStripMenuItem.Click += new System.EventHandler(this.FileQuitClick);
             // 
@@ -194,6 +196,13 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // generateNewPuzzleToolStripMenuItem
+            // 
+            this.generateNewPuzzleToolStripMenuItem.Name = "generateNewPuzzleToolStripMenuItem";
+            this.generateNewPuzzleToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
+            this.generateNewPuzzleToolStripMenuItem.Text = "&Generate New Puzzle";
+            this.generateNewPuzzleToolStripMenuItem.Click += new System.EventHandler(this.generateNewPuzzleClick);
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -232,5 +241,6 @@
         private System.Windows.Forms.ToolStripMenuItem gameRulesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem generateNewPuzzleToolStripMenuItem;
     }
 }

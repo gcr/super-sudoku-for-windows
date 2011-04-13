@@ -12,6 +12,7 @@ namespace SuperSudoku
     public partial class GameForm : Form
     {
         private Grid grid;
+        private Grid solvedGrid;
         private SudokuGridControl gcontrol;
         private File fileWriter = new File();
         private Solver solver = new Solver();
@@ -29,33 +30,46 @@ namespace SuperSudoku
             this.grid = grid;
             this.isPlaying = playingMode;
 
+            // Solve the grid
+            solvedGrid = grid.Copy();
+            try
+            {
+                solver.Solve(solvedGrid);
+            }
+            catch (NotImplementedException e)
+            {
+                // uh oh!
+            }
+                
+
             this.gcontrol = new SudokuGridControl(grid);
             this.gridPanel.Controls.Add(gcontrol);
             gcontrol.Dock = DockStyle.Fill;
 
+            // When the cell is cleared, mark/unmark errors and hints
             gcontrol.CellClear += (int row, int col) =>
             {
-                Console.WriteLine("Cleared grid row " + row + " col " + col);
                 RecalculateErrors();
                 RecalculateHints(row, col);
                 ShowOrHideHintBar();
             };
 
+            // When the cell's value is changed, mark/unmark errors and hints
             gcontrol.CellChange += (int row, int col) =>
             {
-                Console.WriteLine("Set grid " + row + "," + col + " to " + grid.Get(row, col));
                 RecalculateErrors();
                 RecalculateHints(row, col);
                 ShowOrHideHintBar();
             };
 
+            // When the user selects a different cell, mark/unmark errors and hints
             gcontrol.CellFocused += (int row, int col) =>
             {
-                Console.WriteLine("Selected grid " + row + "," + col);
                 RecalculateHints(row, col);
                 ShowOrHideHintBar();
             };
 
+            // Add a drop-down context menu to each textbox
             gcontrol.ForEachTextBox((TextBox tbox, int row, int col) =>
             {
                 tbox.ContextMenu = new ContextMenu();
@@ -65,9 +79,53 @@ namespace SuperSudoku
                     }));
                 tbox.ContextMenu.MenuItems.Add(new MenuItem("&Solve This Square", (s, e) =>
                     {
-                        throw new NotImplementedException();
+                        if (grid.IsEditable(row, col))
+                        {
+                            grid.Set(solvedGrid.Get(row, col), true, row, col);
+                            gcontrol.UpdateGridView();
+                        }
                     }));
             });
+        }
+
+
+        /// <summary>
+        /// When the File -> Generate New Puzzle menu item is clicked
+        /// </summary>
+        private void generateNewPuzzleClick(object sender, EventArgs e)
+        {
+            bool abortNewGame = false;
+            if (MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                SaveFileDialog dialog = new SaveFileDialog();
+                dialog.Filter = "Sudoku Game|*.sud";
+                dialog.Title = "Save Game";
+                dialog.ShowDialog();
+
+                if (dialog.FileName != "")
+                {
+                    fileWriter.WriteFile(grid, dialog.FileName);
+                }
+                else
+                {
+                    abortNewGame = true;
+                }
+            }
+
+            if (!abortNewGame)
+            {
+                DifficultyForm dform = new DifficultyForm();
+                Generator gen = new Generator();
+                dform.ShowDialog();
+                if (dform.HasResult)
+                {
+                    this.Hide();
+                    gen.Generate(dform.Result);
+                    GameForm gform = new GameForm(gen.SolutionGrid, true);
+                    gform.ShowDialog();
+                    this.Close();
+                }
+            }
         }
 
         /// <summary>
@@ -229,6 +287,14 @@ namespace SuperSudoku
         {
             List<int> hints = solver.GetHintsFor(grid, row, col);
             hintBarText.Text = "Hints: " + String.Join(",", hints.Select((i)=>""+i).ToArray());
+        }
+
+        /// <summary>
+        /// Returns true if the game is successfully completed.
+        /// </summary>
+        private bool IsGameFinished()
+        {
+            return grid.IsFull() && solver.FindErrors(grid).Count == 0;
         }
     }
 }

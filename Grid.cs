@@ -15,6 +15,49 @@ namespace SuperSudoku
         private int[][] elts;
 
         /// <summary>
+        /// Constructor: Turn a flat list of elements into a sudoku grid.
+        /// </summary>
+        /// <param name="elements">Flat list of 81 elements. Each section of nine elements is a new row.</param>
+        public Grid(int[] elements)
+        {
+            if (elements.Length != 81)
+            {
+                throw new InvalidOperationException("Expected a grid with 9 elements, got " + elements.Length);
+            }
+            int part = 0;
+            this.elts = elements
+                .GroupBy((int index) => part++ / 9)
+                .Select((row) => row.ToArray())
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Constructor: Turn a jagged array of elements into a grid.
+        /// </summary>
+        /// <param name="elements">Jagged 9x9 array of elements. Row-major.</param>
+        public Grid(int[][] elements)
+        {
+            if (elements.Length != 9 || elements[0].Length != 9)
+            {
+                throw new InvalidOperationException("Expected a grid with 9 elements to each dimension");
+            }
+            this.elts = elements;
+        }
+
+        /// <summary>
+        /// Constructor: Turn a 2D list into elements.
+        /// </summary>
+        /// <param name="elements">9x9 2D list of elements. Row-major.</param>
+        public Grid(List<List<int>> elements)
+        {
+            if (elements.Count != 9 || elements[0].Count != 9)
+            {
+                throw new InvalidOperationException("Expected a grid with 9 elements to each dimension");
+            }
+            this.elts = elements.Select((elt) => elt.ToArray()).ToArray();
+        }
+
+        /// <summary>
         /// Gets the cell at given row and column. Returns a positive number.
         /// </summary>
         public int Get(int row, int col)
@@ -129,54 +172,30 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// Constructor: Turn a flat list of elements into a sudoku grid.
-        /// </summary>
-        /// <param name="elements">Flat list of 81 elements. Each section of nine elements is a new row.</param>
-        public Grid(int[] elements)
-        {
-            if (elements.Length != 81)
-            {
-                throw new InvalidOperationException("Expected a grid with 9 elements, got " + elements.Length);
-            }
-            int part = 0;
-            this.elts = elements
-                .GroupBy((int index) => part++ / 9)
-                .Select((row) => row.ToArray())
-                .ToArray();
-        }
-
-        /// <summary>
-        /// Constructor: Turn a jagged array of elements into a grid.
-        /// </summary>
-        /// <param name="elements">Jagged 9x9 array of elements. Row-major.</param>
-        public Grid(int[][] elements)
-        {
-            if (elements.Length != 9 || elements[0].Length != 9)
-            {
-                throw new InvalidOperationException("Expected a grid with 9 elements to each dimension");
-            }
-            this.elts = elements;
-        }
-
-        /// <summary>
-        /// Constructor: Turn a 2D list into elements.
-        /// </summary>
-        /// <param name="elements">9x9 2D list of elements. Row-major.</param>
-        public Grid(List<List<int>> elements)
-        {
-            if (elements.Count != 9 || elements[0].Count != 9)
-            {
-                throw new InvalidOperationException("Expected a grid with 9 elements to each dimension");
-            }
-            this.elts = elements.Select((elt) => elt.ToArray()).ToArray();
-        }
-
-        /// <summary>
         /// Return a copy of this grid.
         /// </summary>
         public Grid Copy()
         {
             return new Grid(this.elts.Select((row) => (int[])row.Clone()).ToArray());
+        }
+
+        /// <summary>
+        /// Returns whether the grid is full or not.
+        /// </summary>
+        public bool IsFull()
+        {
+            bool result = true;
+            for (int row = 0; row < 9; row++)
+            {
+                for (int col = 0; col < 9; col++)
+                {
+                    if (elts[row][col] == 0)
+                    {
+                        result = false;
+                    }
+                }
+            }
+            return result;
         }
 
         /// <summary>
