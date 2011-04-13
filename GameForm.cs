@@ -59,7 +59,14 @@ namespace SuperSudoku
             gcontrol.ForEachTextBox((TextBox tbox, int row, int col) =>
             {
                 tbox.ContextMenu = new ContextMenu();
-                //for (MenuItem mnu in contextMenu.
+                tbox.ContextMenu.MenuItems.Add(new MenuItem("Show &Hints", (s, e) =>
+                    {
+                        hintBarText.Show();
+                    }));
+                tbox.ContextMenu.MenuItems.Add(new MenuItem("&Solve This Square", (s, e) =>
+                    {
+                        throw new NotImplementedException();
+                    }));
             });
         }
 

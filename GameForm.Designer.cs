@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.hintBarText = new System.Windows.Forms.Label();
+            this.solveButton = new System.Windows.Forms.Button();
+            this.gridPanel = new System.Windows.Forms.Panel();
             this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.enterPuzzleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,27 +44,40 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameRulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hintBarText = new System.Windows.Forms.Label();
-            this.solveButton = new System.Windows.Forms.Button();
-            this.gridPanel = new System.Windows.Forms.Panel();
-            this.contextMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.showHintsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.solveThisSquareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // hintBarText
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FileMenu,
-            this.optionsToolStripMenuItem,
-            this.helpToolStripMenuItem,
-            this.contextMenu});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(466, 37);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.hintBarText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.hintBarText.AutoSize = true;
+            this.hintBarText.Location = new System.Drawing.Point(12, 456);
+            this.hintBarText.Name = "hintBarText";
+            this.hintBarText.Size = new System.Drawing.Size(45, 13);
+            this.hintBarText.TabIndex = 3;
+            this.hintBarText.Text = "Hint Bar";
+            // 
+            // solveButton
+            // 
+            this.solveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.solveButton.Location = new System.Drawing.Point(307, 445);
+            this.solveButton.Name = "solveButton";
+            this.solveButton.Size = new System.Drawing.Size(147, 35);
+            this.solveButton.TabIndex = 4;
+            this.solveButton.Text = "Solve...";
+            this.solveButton.UseVisualStyleBackColor = true;
+            this.solveButton.Click += new System.EventHandler(this.SolveClick);
+            // 
+            // gridPanel
+            // 
+            this.gridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridPanel.Location = new System.Drawing.Point(12, 40);
+            this.gridPanel.Name = "gridPanel";
+            this.gridPanel.Size = new System.Drawing.Size(442, 399);
+            this.gridPanel.TabIndex = 5;
             // 
             // FileMenu
             // 
@@ -167,58 +182,17 @@
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.HelpAboutClick);
             // 
-            // hintBarText
+            // menuStrip1
             // 
-            this.hintBarText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.hintBarText.AutoSize = true;
-            this.hintBarText.Location = new System.Drawing.Point(12, 456);
-            this.hintBarText.Name = "hintBarText";
-            this.hintBarText.Size = new System.Drawing.Size(45, 13);
-            this.hintBarText.TabIndex = 3;
-            this.hintBarText.Text = "Hint Bar";
-            // 
-            // solveButton
-            // 
-            this.solveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.solveButton.Location = new System.Drawing.Point(307, 445);
-            this.solveButton.Name = "solveButton";
-            this.solveButton.Size = new System.Drawing.Size(147, 35);
-            this.solveButton.TabIndex = 4;
-            this.solveButton.Text = "Solve...";
-            this.solveButton.UseVisualStyleBackColor = true;
-            this.solveButton.Click += new System.EventHandler(this.SolveClick);
-            // 
-            // gridPanel
-            // 
-            this.gridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridPanel.Location = new System.Drawing.Point(12, 40);
-            this.gridPanel.Name = "gridPanel";
-            this.gridPanel.Size = new System.Drawing.Size(442, 399);
-            this.gridPanel.TabIndex = 5;
-            // 
-            // contextMenu
-            // 
-            this.contextMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showHintsToolStripMenuItem,
-            this.solveThisSquareToolStripMenuItem});
-            this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(121, 33);
-            this.contextMenu.Text = "(context)";
-            this.contextMenu.Visible = false;
-            // 
-            // showHintsToolStripMenuItem
-            // 
-            this.showHintsToolStripMenuItem.Name = "showHintsToolStripMenuItem";
-            this.showHintsToolStripMenuItem.Size = new System.Drawing.Size(299, 34);
-            this.showHintsToolStripMenuItem.Text = "Show &Hints";
-            // 
-            // solveThisSquareToolStripMenuItem
-            // 
-            this.solveThisSquareToolStripMenuItem.Name = "solveThisSquareToolStripMenuItem";
-            this.solveThisSquareToolStripMenuItem.Size = new System.Drawing.Size(299, 34);
-            this.solveThisSquareToolStripMenuItem.Text = "&Solve This Square";
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FileMenu,
+            this.optionsToolStripMenuItem,
+            this.helpToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(466, 37);
+            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.Text = "menuStrip1";
             // 
             // GameForm
             // 
@@ -241,7 +215,9 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.Label hintBarText;
+        private System.Windows.Forms.Button solveButton;
+        private System.Windows.Forms.Panel gridPanel;
         private System.Windows.Forms.ToolStripMenuItem FileMenu;
         private System.Windows.Forms.ToolStripMenuItem enterPuzzleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveGameToolStripMenuItem;
@@ -255,11 +231,6 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gameRulesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.Label hintBarText;
-        private System.Windows.Forms.Button solveButton;
-        private System.Windows.Forms.Panel gridPanel;
-        private System.Windows.Forms.ToolStripMenuItem contextMenu;
-        private System.Windows.Forms.ToolStripMenuItem showHintsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem solveThisSquareToolStripMenuItem;
+        private System.Windows.Forms.MenuStrip menuStrip1;
     }
 }
