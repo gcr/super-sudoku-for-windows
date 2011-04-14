@@ -16,6 +16,8 @@ namespace SuperSudoku
         private SudokuGridControl gcontrol;
         private Solver solver = new Solver();
 
+        private bool nagAboutErrors = true;
+
         private bool isPlaying;
 
         /// <summary>
@@ -29,15 +31,11 @@ namespace SuperSudoku
             this.grid = grid;
             this.isPlaying = playingMode;
 
-            // Solve the grid
-            solvedGrid = grid.Copy();
-            try
+            if (isPlaying)
             {
+                // Solve the grid
+                solvedGrid = grid.Copy();
                 solver.Solve(solvedGrid);
-            }
-            catch (NotImplementedException e)
-            {
-                // uh oh!
             }
                 
 
@@ -48,6 +46,7 @@ namespace SuperSudoku
             // When the cell is cleared, mark/unmark errors and hints
             gcontrol.CellClear += (int row, int col) =>
             {
+                nagAboutErrors = true;
                 RecalculateErrors();
                 RecalculateHints(row, col);
                 ShowOrHideHintBar();
@@ -56,6 +55,7 @@ namespace SuperSudoku
             // When the cell's value is changed, mark/unmark errors and hints
             gcontrol.CellChange += (int row, int col) =>
             {
+                MaybeTryGameOver();
                 RecalculateErrors();
                 RecalculateHints(row, col);
                 ShowOrHideHintBar();
@@ -72,23 +72,53 @@ namespace SuperSudoku
             gcontrol.ForEachTextBox((TextBox tbox, int row, int col) =>
             {
                 tbox.ContextMenu = new ContextMenu();
-                tbox.ContextMenu.MenuItems.Add(new MenuItem("Show &Hints", (s, e) =>
-                    {
-                        hintBarText.Show();
-                    }));
-                tbox.ContextMenu.MenuItems.Add(new MenuItem("&Solve This Square", (s, e) =>
-                    {
-                        if (grid.IsEditable(row, col))
+                if (isPlaying)
+                {
+                    tbox.ContextMenu.MenuItems.Add(new MenuItem("Show &Hints", (s, e) =>
                         {
-                            grid.Set(solvedGrid.Get(row, col), true, row, col);
-                            gcontrol.UpdateGridView();
-                        }
-                    }));
+                            hintBarText.Show();
+                        }));
+                    tbox.ContextMenu.MenuItems.Add(new MenuItem("&Solve This Square", (s, e) =>
+                        {
+                            if (grid.IsEditable(row, col))
+                            {
+                                grid.Set(solvedGrid.Get(row, col), true, row, col);
+                                gcontrol.UpdateGridView();
+                            }
+                        }));
+                }
             });
 
 
             RecalculateErrors();
             ShowOrHideHintBar();
+        }
+
+        /// <summary>
+        /// Check to see if the game is finished.
+        /// </summary>
+        private void MaybeTryGameOver()
+        {
+            if (grid.IsFull())
+            {
+                if (solver.FindErrors(grid).Count > 0)
+                {
+                    if (nagAboutErrors && showErrorsToolStripMenuItem.Checked)
+                    {
+                        MessageBox.Show("There are errors.");
+                    }
+                    else if (nagAboutErrors && MessageBox.Show("There are errors, would you like to see them?", "Errors", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        showErrorsToolStripMenuItem.Checked = true;
+                        RecalculateErrors();
+                    }
+                    nagAboutErrors = false;
+                }
+                else
+                {
+                    MessageBox.Show("Good job!");
+                }
+            }
         }
 
 
@@ -115,9 +145,10 @@ namespace SuperSudoku
         /// </summary>
         private void FileEnterPuzzleClick(object sender, EventArgs e)
         {
-            MessageBox.Show("TODO: check for errors"); // NotImplementedException
-
-            GameManager.EnterNewPuzzle(this);
+            if (MessageBox.Show("Are you sure you want to start a new game?", "New game?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                GameManager.EnterNewPuzzle(this);
+            }
         }
 
         /// <summary>
@@ -200,8 +231,11 @@ namespace SuperSudoku
         /// </summary>
         private void SolveClick(object sender, EventArgs e)
         {
-            solver.Solve(grid);
-            gcontrol.UpdateGridView();
+            if (MessageBox.Show("Are you sure you want the computer to solve the puzzle?", "Solve now?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                solver.Solve(grid);
+                gcontrol.UpdateGridView();
+            }
         }
 
         /// <summary>

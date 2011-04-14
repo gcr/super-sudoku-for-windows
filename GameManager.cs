@@ -83,7 +83,7 @@ namespace SuperSudoku
         public static void EnterNewPuzzle(Form form)
         {
             form.Hide();
-            GameForm gform = new GameForm(new Grid(), true);
+            GameForm gform = new GameForm(new Grid(), false);
             gform.ShowDialog();
             form.Close();
         }
