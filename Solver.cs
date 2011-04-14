@@ -21,7 +21,19 @@ namespace SuperSudoku
         /// </returns>
         public bool Solve(Grid grid)
         {
-            throw new NotImplementedException();
+            // awwwwh yeah
+            Random r = new Random();
+            for (int row = 0; row < 9; row++)
+            {
+                for (int col = 0; col < 9; col++)
+                {
+                    if (grid.IsEditable(row, col))
+                    {
+                        grid.Set(r.Next(1, 10), true, row, col);
+                    }
+                }
+            }
+            return true;
         }
 
 
