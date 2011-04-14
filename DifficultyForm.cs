@@ -11,16 +11,47 @@ namespace SuperSudoku
 {
     public partial class DifficultyForm : Form
     {
-        private DifficultyLevel result;
+        private Grid result;
         private bool hasResult = false;
 
+        private Grid easy;
+        private Grid med;
+        private Grid hard;
+
+        Generator gen = new Generator();
 
         public DifficultyForm()
         {
             InitializeComponent();
+
+            makeNewGrids();
         }
 
-        public DifficultyLevel Result
+        private void makeNewGrids()
+        {
+            easy = gen.Generate(DifficultyLevel.Easy);
+            easyPanel.Controls.Clear();
+            SudokuGridControl easyGcontrol = new SudokuGridControl(easy);
+            easyPanel.Controls.Add(easyGcontrol);
+            easyGcontrol.Dock = DockStyle.Fill;
+            easyGcontrol.IsEditable = false;
+
+            med = gen.Generate(DifficultyLevel.Medium);
+            medPanel.Controls.Clear();
+            SudokuGridControl medGcontrol = new SudokuGridControl(med);
+            medPanel.Controls.Add(medGcontrol);
+            medGcontrol.Dock = DockStyle.Fill;
+            medGcontrol.IsEditable = false;
+
+            hard = gen.Generate(DifficultyLevel.Hard);
+            hardPanel.Controls.Clear();
+            SudokuGridControl hardGcontrol = new SudokuGridControl(hard);
+            hardPanel.Controls.Add(hardGcontrol);
+            hardGcontrol.Dock = DockStyle.Fill;
+            hardGcontrol.IsEditable = false;
+        }
+
+        public Grid Result
         {
             get { return result; }
         }
@@ -32,21 +63,21 @@ namespace SuperSudoku
 
         private void easyButton_Click(object sender, EventArgs e)
         {
-            result = DifficultyLevel.Easy;
+            result = easy;
             hasResult = true;
             this.Close();
         }
 
-        private void n_Click(object sender, EventArgs e)
+        private void medButtonClick(object sender, EventArgs e)
         {
-            result = DifficultyLevel.Medium;
+            result = med;
             hasResult = true;
             this.Close();
         }
 
         private void hardButton_Click(object sender, EventArgs e)
         {
-            result = DifficultyLevel.Hard;
+            result = hard;
             hasResult = true;
             this.Close();
         }

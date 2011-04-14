@@ -66,12 +66,11 @@ namespace SuperSudoku
         public static void GeneratePuzzle(Form form)
         {
             DifficultyForm dform = new DifficultyForm();
-            Generator gen = new Generator();
             dform.ShowDialog();
             if (dform.HasResult)
             {
                 form.Hide();
-                GameForm gform = new GameForm(gen.Generate(dform.Result), true);
+                GameForm gform = new GameForm(dform.Result, true);
                 gform.ShowDialog();
                 form.Close();
             }

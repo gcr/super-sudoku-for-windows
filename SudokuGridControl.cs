@@ -16,6 +16,13 @@ namespace SuperSudoku
         private Grid grid;
         private TextBox[][] boxes;
 
+        private bool isEditable = true;
+        public bool IsEditable
+        {
+            get { return isEditable; }
+            set { isEditable = value; UpdateGridView(); }
+        }
+
         // Events: when the user selects, changes, and clears cells.
         private event GridEvent onSelect;
         private event GridEvent onChange;
@@ -217,7 +224,7 @@ namespace SuperSudoku
         /// </summary>
         private void ClearCell(int row, int col)
         {
-            if (grid.IsEditable(row, col)) {
+            if (grid.IsEditable(row, col) && isEditable) {
                 grid.Clear(row, col);
                 boxes[row][col].Text = "";
                 if (this.onClear != null) this.onClear(row, col);
@@ -230,7 +237,7 @@ namespace SuperSudoku
         /// </summary>
         private void SetCell(int row, int col, int value)
         {
-            if (grid.IsEditable(row, col)) {
+            if (grid.IsEditable(row, col) && isEditable) {
                 grid.Set(value, true, row, col);
                 if (this.onChange != null) this.onChange(row, col);
             }
@@ -326,7 +333,7 @@ namespace SuperSudoku
             TextBox tbox = boxes[row][col];
             tbox.BackColor = Color.White;
             tbox.ForeColor = Color.Black;
-            tbox.ReadOnly = false;
+            tbox.ReadOnly = ! IsEditable;
         }
 
         /// <summary>
