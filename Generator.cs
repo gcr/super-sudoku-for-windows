@@ -10,6 +10,43 @@ namespace SuperSudoku
     class Generator
     {
 
+        private Random rand = new Random();
+        private Solver solver = new Solver();
+
+        /// <summary>
+        /// Helper function: count the blank squares
+        /// </summary>
+        private int CountBlank(Grid grid)
+        {
+            int nBlanks = 0;
+            grid.ForEachSquare((row, col, val) =>
+            {
+                if (val == 0)
+                {
+                    nBlanks+=1;
+                }
+            });
+            return nBlanks;
+        }
+
+        /// <summary>
+        /// Blank two squares in a symmetric fashion, or not.
+        /// </summary>
+        private void MaybeRandomBlank(Grid grid)
+        {
+            int row1 = rand.Next(9);
+            int col1 = rand.Next(9);
+
+            int row2 = (8 - row1);
+            int col2 = (8 - col1);
+
+            if (grid.Get(row1, col1) != 0 && grid.Get(row2, col2) != 0)
+            {
+                grid.Set(0, true, row1, col1);
+                grid.Set(0, true, row2, col2);
+            }
+        }
+
         /// <summary>
         /// Generates a grid with the given difficulty level
         /// </summary>
@@ -22,7 +59,6 @@ namespace SuperSudoku
             //    remove ~two blanks symmetrically
             //    if it isn't uniquely solvable, add those two blanks again.
             Grid grid = GenerateBlankGrid();
-            Random rand = new Random();
 
             // Top row
             List<int> row = new List<int>();
@@ -54,6 +90,46 @@ namespace SuperSudoku
                 grid.Set(row[i], false, 0, i);
             }
 
+            // Now, solve the grid.
+            solver.Solve(grid);
+
+            // How many blanks do we need?
+            int targetBlanks = 0;
+            switch (difficulty)
+            {
+                case DifficultyLevel.Easy:
+                    targetBlanks = 40;
+                    break;
+                case DifficultyLevel.Medium:
+                    targetBlanks = 50;
+                    break;
+                case DifficultyLevel.Hard:
+                    targetBlanks = 60;
+                    break;
+            }
+
+            // Remove squares until we have the right number of blanks.
+            int tries = 0;
+            while (tries < 1000 && CountBlank(grid) < targetBlanks)
+            {
+                Grid saveCopy = grid.Copy();
+                MaybeRandomBlank(grid);
+                if (!solver.Solve(grid.Copy()))
+                {
+                    // it failed
+                    grid = saveCopy;
+                }
+                tries++;
+            }
+
+            // finally, set every square to be not editable
+            grid.ForEachSquare((r, c, val) =>
+            {
+                if (val != 0)
+                {
+                    grid.SetEditable(false, r, c);
+                }
+            });
 
             return grid;
         }

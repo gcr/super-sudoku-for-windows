@@ -85,6 +85,10 @@ namespace SuperSudoku
                         }
                     }));
             });
+
+
+            RecalculateErrors();
+            ShowOrHideHintBar();
         }
 
 
