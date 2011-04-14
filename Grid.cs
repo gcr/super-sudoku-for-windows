@@ -78,10 +78,6 @@ namespace SuperSudoku
         /// </summary>
         public void Set(int val, bool isEditable, int row, int col)
         {
-            if (!IsEditable(row, col))
-            {
-                throw new InvalidOperationException("Tried to change the value of an uneditable cell");
-            }
             elts[row][col] = (isEditable? 1 : -1) * Math.Abs(val);
         }
 
@@ -107,7 +103,7 @@ namespace SuperSudoku
         /// </summary>
         public int[] GetColumn(int col)
         {
-            return elts.Select((row) => row[col]).ToArray();
+            return elts.Select((row) => Math.Abs(row[col])).ToArray();
         }
 
         /// <summary>
@@ -115,7 +111,7 @@ namespace SuperSudoku
         /// </summary>
         public int[] GetRow(int row)
         {
-            return (int[]) elts[row].Clone();
+            return (int[])elts[row].Select((item) => Math.Abs(item)).ToArray();
         }
 
         /// <summary>
@@ -153,7 +149,7 @@ namespace SuperSudoku
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    result[i*3+j] = this.elts[i + sqRow][j + sqCol];
+                    result[i*3+j] = Math.Abs(this.elts[i + sqRow][j + sqCol]);
                 }
             }
             return result;

@@ -71,8 +71,7 @@ namespace SuperSudoku
             if (dform.HasResult)
             {
                 form.Hide();
-                gen.Generate(dform.Result);
-                GameForm gform = new GameForm(gen.SolutionGrid, true);
+                GameForm gform = new GameForm(gen.Generate(dform.Result), true);
                 gform.ShowDialog();
                 form.Close();
             }
