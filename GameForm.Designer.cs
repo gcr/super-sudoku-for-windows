@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.hintBarText = new System.Windows.Forms.Label();
             this.solveButton = new System.Windows.Forms.Button();
             this.gridPanel = new System.Windows.Forms.Panel();
             this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateNewPuzzleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterPuzzleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveGameUnsolvedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,7 +47,8 @@
             this.gameRulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.generateNewPuzzleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timerLabel = new System.Windows.Forms.Label();
+            this.gameTimer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,9 +78,9 @@
             this.gridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridPanel.Location = new System.Drawing.Point(12, 40);
+            this.gridPanel.Location = new System.Drawing.Point(12, 79);
             this.gridPanel.Name = "gridPanel";
-            this.gridPanel.Size = new System.Drawing.Size(442, 399);
+            this.gridPanel.Size = new System.Drawing.Size(442, 360);
             this.gridPanel.TabIndex = 5;
             // 
             // FileMenu
@@ -93,6 +96,13 @@
             this.FileMenu.Name = "FileMenu";
             this.FileMenu.Size = new System.Drawing.Size(61, 33);
             this.FileMenu.Text = "&File";
+            // 
+            // generateNewPuzzleToolStripMenuItem
+            // 
+            this.generateNewPuzzleToolStripMenuItem.Name = "generateNewPuzzleToolStripMenuItem";
+            this.generateNewPuzzleToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
+            this.generateNewPuzzleToolStripMenuItem.Text = "&Generate New Puzzle";
+            this.generateNewPuzzleToolStripMenuItem.Click += new System.EventHandler(this.FileGenerateNewPuzzleClick);
             // 
             // enterPuzzleToolStripMenuItem
             // 
@@ -196,18 +206,30 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // generateNewPuzzleToolStripMenuItem
+            // timerLabel
             // 
-            this.generateNewPuzzleToolStripMenuItem.Name = "generateNewPuzzleToolStripMenuItem";
-            this.generateNewPuzzleToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
-            this.generateNewPuzzleToolStripMenuItem.Text = "&Generate New Puzzle";
-            this.generateNewPuzzleToolStripMenuItem.Click += new System.EventHandler(this.FileGenerateNewPuzzleClick);
+            this.timerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.timerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timerLabel.Location = new System.Drawing.Point(12, 37);
+            this.timerLabel.Name = "timerLabel";
+            this.timerLabel.Size = new System.Drawing.Size(442, 39);
+            this.timerLabel.TabIndex = 6;
+            this.timerLabel.Text = "0:00";
+            this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // gameTimer
+            // 
+            this.gameTimer.Enabled = true;
+            this.gameTimer.Interval = 1000;
+            this.gameTimer.Tick += new System.EventHandler(this.gameTimerTick);
             // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(466, 490);
+            this.Controls.Add(this.timerLabel);
             this.Controls.Add(this.gridPanel);
             this.Controls.Add(this.solveButton);
             this.Controls.Add(this.hintBarText);
@@ -242,5 +264,7 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem generateNewPuzzleToolStripMenuItem;
+        private System.Windows.Forms.Label timerLabel;
+        private System.Windows.Forms.Timer gameTimer;
     }
 }

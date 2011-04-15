@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace SuperSudoku
 {
@@ -15,6 +16,8 @@ namespace SuperSudoku
         private Grid solvedGrid;
         private SudokuGridControl gcontrol;
         private Solver solver = new Solver();
+
+        private int gameTime = 0;
 
         private bool nagAboutErrors = true;
 
@@ -36,6 +39,11 @@ namespace SuperSudoku
                 // Solve the grid
                 solvedGrid = grid.Copy();
                 solver.Solve(solvedGrid);
+                solveButton.Text = "&Solve";
+            }
+            else
+            {
+                solveButton.Text = "&Enter Puzzle";
             }
                 
 
@@ -89,7 +97,7 @@ namespace SuperSudoku
                 }
             });
 
-
+            gameTimerTick(this, new EventArgs());
             RecalculateErrors();
             ShowOrHideHintBar();
         }
@@ -99,7 +107,7 @@ namespace SuperSudoku
         /// </summary>
         private void MaybeTryGameOver()
         {
-            if (grid.IsFull())
+            if (isPlaying && grid.IsFull())
             {
                 if (solver.FindErrors(grid).Count > 0)
                 {
@@ -127,14 +135,15 @@ namespace SuperSudoku
         /// </summary>
         private void FileGenerateNewPuzzleClick(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            DialogResult result = MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNoCancel);
+            if (result == DialogResult.Yes)
             {
                 if (GameManager.SaveGame(grid))
                 {
                     GameManager.GeneratePuzzle(this);
                 }
             }
-            else
+            else if (result == DialogResult.No)
             {
                 GameManager.GeneratePuzzle(this);
             }
@@ -145,7 +154,15 @@ namespace SuperSudoku
         /// </summary>
         private void FileEnterPuzzleClick(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to start a new game?", "New game?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            DialogResult result = MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNoCancel);
+            if (result == DialogResult.Yes)
+            {
+                if (GameManager.SaveGame(grid))
+                {
+                    GameManager.EnterNewPuzzle(this);
+                }
+            }
+            else if (result == DialogResult.No)
             {
                 GameManager.EnterNewPuzzle(this);
             }
@@ -179,8 +196,18 @@ namespace SuperSudoku
         /// </summary>
         private void FileLoadClick(object sender, EventArgs e)
         {
-            MessageBox.Show("TODO: check for errors"); // NotImplementedException
-            GameManager.LoadGame(this);
+            DialogResult result = MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNoCancel);
+            if (result == DialogResult.Yes)
+            {
+                if (GameManager.SaveGame(grid))
+                {
+                    GameManager.LoadGame(this);
+                }
+            }
+            else if (result == DialogResult.No)
+            {
+                GameManager.LoadGame(this);
+            }
         }
 
         /// <summary>
@@ -188,8 +215,18 @@ namespace SuperSudoku
         /// </summary>
         private void FileQuitClick(object sender, EventArgs e)
         {
-            MessageBox.Show("TODO: check for errors"); // NotImplementedException
-            this.Close();
+            DialogResult result = MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNoCancel);
+            if (result == DialogResult.Yes)
+            {
+                if (GameManager.SaveGame(grid))
+                {
+                    this.Close();
+                }
+            }
+            else if (result == DialogResult.No)
+            {
+                this.Close();
+            }
         }
 
         /// <summary>
@@ -215,7 +252,7 @@ namespace SuperSudoku
         /// </summary>
         private void HelpRulesClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            Process.Start("http://puzzles.about.com/library/sudoku/blsudoku_tutorial01.htm");
         }
 
         /// <summary>
@@ -223,7 +260,7 @@ namespace SuperSudoku
         /// </summary>
         private void HelpAboutClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            new AboutBox().ShowDialog();
         }
 
         /// <summary>
@@ -231,10 +268,17 @@ namespace SuperSudoku
         /// </summary>
         private void SolveClick(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want the computer to solve the puzzle?", "Solve now?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (isPlaying)
             {
-                solver.Solve(grid);
-                gcontrol.UpdateGridView();
+                if (MessageBox.Show("Are you sure you want the computer to solve the puzzle?", "Solve now?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    solver.Solve(grid);
+                    gcontrol.UpdateGridView();
+                }
+            }
+            else
+            {
+                GameManager.PlayThisPuzzle(grid, this);
             }
         }
 
@@ -278,6 +322,24 @@ namespace SuperSudoku
         private bool IsGameFinished()
         {
             return grid.IsFull() && solver.FindErrors(grid).Count == 0;
+        }
+
+        private string formatGameTime()
+        {
+            return gameTime / 60 + ":" + ((gameTime % 60) < 10 ? "0" : "") + gameTime%60;
+        }
+
+        private void gameTimerTick(object sender, EventArgs e)
+        {
+            if (isPlaying)
+            {
+                timerLabel.Text = formatGameTime();
+                gameTime = gameTime + 1;
+            }
+            else
+            {
+                timerLabel.Text = "Editing puzzle";
+            }
         }
     }
 }

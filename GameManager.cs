@@ -87,5 +87,24 @@ namespace SuperSudoku
             gform.ShowDialog();
             form.Close();
         }
+
+        /// <summary>
+        /// When the player transitions from "edit grid" mode to "play this game" mode
+        /// </summary>
+        internal static void PlayThisPuzzle(Grid oldGrid, Form form)
+        {
+            grid = oldGrid.Copy();
+            grid.ForEachSquare((row, col, val) =>
+            {
+                if (val != 0)
+                {
+                    grid.SetEditable(false, row, col);
+                }
+            });
+            form.Hide();
+            GameForm gform = new GameForm(grid, true);
+            gform.ShowDialog();
+            form.Close();
+        }
     }
 }
