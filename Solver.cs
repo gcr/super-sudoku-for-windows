@@ -17,7 +17,7 @@ namespace SuperSudoku
         /// </param>
         /// <returns>
         /// If the puzzle can be unambiguously solved, Solve() will return true.
-        /// If the puzzle cannot be solved or is 
+        /// If the puzzle cannot be solved or is invalid, this will return false.
         /// </returns>
         public bool Solve(Grid grid)
         {

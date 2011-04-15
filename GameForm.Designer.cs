@@ -58,9 +58,9 @@
             this.hintBarText.AutoSize = true;
             this.hintBarText.Location = new System.Drawing.Point(12, 456);
             this.hintBarText.Name = "hintBarText";
-            this.hintBarText.Size = new System.Drawing.Size(45, 13);
+            this.hintBarText.Size = new System.Drawing.Size(50, 13);
             this.hintBarText.TabIndex = 3;
-            this.hintBarText.Text = "Hint Bar";
+            this.hintBarText.Text = "Hints Bar";
             // 
             // solveButton
             // 
@@ -100,35 +100,42 @@
             // generateNewPuzzleToolStripMenuItem
             // 
             this.generateNewPuzzleToolStripMenuItem.Name = "generateNewPuzzleToolStripMenuItem";
-            this.generateNewPuzzleToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
+            this.generateNewPuzzleToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.generateNewPuzzleToolStripMenuItem.Size = new System.Drawing.Size(478, 34);
             this.generateNewPuzzleToolStripMenuItem.Text = "&Generate New Puzzle";
             this.generateNewPuzzleToolStripMenuItem.Click += new System.EventHandler(this.FileGenerateNewPuzzleClick);
             // 
             // enterPuzzleToolStripMenuItem
             // 
             this.enterPuzzleToolStripMenuItem.Name = "enterPuzzleToolStripMenuItem";
-            this.enterPuzzleToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
+            this.enterPuzzleToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                        | System.Windows.Forms.Keys.N)));
+            this.enterPuzzleToolStripMenuItem.Size = new System.Drawing.Size(478, 34);
             this.enterPuzzleToolStripMenuItem.Text = "Enter &New Puzzle";
             this.enterPuzzleToolStripMenuItem.Click += new System.EventHandler(this.FileEnterPuzzleClick);
             // 
             // saveGameToolStripMenuItem
             // 
             this.saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
-            this.saveGameToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
+            this.saveGameToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveGameToolStripMenuItem.Size = new System.Drawing.Size(478, 34);
             this.saveGameToolStripMenuItem.Text = "&Save Game";
             this.saveGameToolStripMenuItem.Click += new System.EventHandler(this.FileSaveGameClick);
             // 
             // saveGameUnsolvedToolStripMenuItem
             // 
             this.saveGameUnsolvedToolStripMenuItem.Name = "saveGameUnsolvedToolStripMenuItem";
-            this.saveGameUnsolvedToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
+            this.saveGameUnsolvedToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                        | System.Windows.Forms.Keys.S)));
+            this.saveGameUnsolvedToolStripMenuItem.Size = new System.Drawing.Size(478, 34);
             this.saveGameUnsolvedToolStripMenuItem.Text = "Save Game &Unsolved";
             this.saveGameUnsolvedToolStripMenuItem.Click += new System.EventHandler(this.FileSaveGameUnsolvedClick);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
+            this.loadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(478, 34);
             this.loadToolStripMenuItem.Text = "&Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.FileLoadClick);
             // 
@@ -140,7 +147,8 @@
             // quitGameToolStripMenuItem
             // 
             this.quitGameToolStripMenuItem.Name = "quitGameToolStripMenuItem";
-            this.quitGameToolStripMenuItem.Size = new System.Drawing.Size(337, 34);
+            this.quitGameToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            this.quitGameToolStripMenuItem.Size = new System.Drawing.Size(478, 34);
             this.quitGameToolStripMenuItem.Text = "&Quit Game";
             this.quitGameToolStripMenuItem.Click += new System.EventHandler(this.FileQuitClick);
             // 
@@ -158,7 +166,8 @@
             this.alwaysShowHintsToolStripMenuItem.Checked = true;
             this.alwaysShowHintsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.alwaysShowHintsToolStripMenuItem.Name = "alwaysShowHintsToolStripMenuItem";
-            this.alwaysShowHintsToolStripMenuItem.Size = new System.Drawing.Size(309, 34);
+            this.alwaysShowHintsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+            this.alwaysShowHintsToolStripMenuItem.Size = new System.Drawing.Size(391, 34);
             this.alwaysShowHintsToolStripMenuItem.Text = "&Always Show Hints";
             this.alwaysShowHintsToolStripMenuItem.Click += new System.EventHandler(this.OptionsShowHintsClick);
             // 
@@ -167,7 +176,8 @@
             this.showErrorsToolStripMenuItem.Checked = true;
             this.showErrorsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showErrorsToolStripMenuItem.Name = "showErrorsToolStripMenuItem";
-            this.showErrorsToolStripMenuItem.Size = new System.Drawing.Size(309, 34);
+            this.showErrorsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.showErrorsToolStripMenuItem.Size = new System.Drawing.Size(391, 34);
             this.showErrorsToolStripMenuItem.Text = "&Show Errors";
             this.showErrorsToolStripMenuItem.Click += new System.EventHandler(this.OptionsShowErrorsClick);
             // 

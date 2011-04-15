@@ -93,7 +93,7 @@ namespace SuperSudoku
         /// </summary>
         internal static void PlayThisPuzzle(Grid oldGrid, Form form)
         {
-            grid = oldGrid.Copy();
+            Grid grid = oldGrid.Copy();
             grid.ForEachSquare((row, col, val) =>
             {
                 if (val != 0)
@@ -101,10 +101,23 @@ namespace SuperSudoku
                     grid.SetEditable(false, row, col);
                 }
             });
-            form.Hide();
-            GameForm gform = new GameForm(grid, true);
-            gform.ShowDialog();
-            form.Close();
+            if ((new Solver().Solve(grid.Copy())))
+            {
+                form.Hide();
+                GameForm gform = new GameForm(grid, true);
+                gform.ShowDialog();
+                form.Close();
+            }
+            else
+            {
+                if (MessageBox.Show("This puzzle cannot be solved. Continue editing?", "Unsolvable Puzzle", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    form.Hide();
+                    GameForm gform = new GameForm(grid, true);
+                    gform.ShowDialog();
+                    form.Close();
+                }
+            }
         }
     }
 }

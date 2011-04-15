@@ -34,6 +34,7 @@ namespace SuperSudoku
             this.grid = grid;
             this.isPlaying = playingMode;
 
+            hintBarText.Text = "";
             if (isPlaying)
             {
                 // Solve the grid
@@ -124,7 +125,7 @@ namespace SuperSudoku
                 }
                 else
                 {
-                    MessageBox.Show("Good job!");
+                    MessageBox.Show("Good job! Your time: "+formatGameTime());
                 }
             }
         }
@@ -312,8 +313,15 @@ namespace SuperSudoku
         /// </summary>
         private void RecalculateHints(int row, int col)
         {
-            List<int> hints = solver.GetHintsFor(grid, row, col);
-            hintBarText.Text = "Hints: " + String.Join(",", hints.Select((i)=>""+i).ToArray());
+            if (isPlaying)
+            {
+                List<int> hints = solver.GetHintsFor(grid, row, col);
+                hintBarText.Text = "Hints: " + String.Join(",", hints.Select((i) => "" + i).ToArray());
+            }
+            else
+            {
+                hintBarText.Text = (solver.Solve(grid.Copy())) ? "" : "This puzzle cannot be solved.";
+            }
         }
 
         /// <summary>
