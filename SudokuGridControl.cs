@@ -148,13 +148,17 @@ namespace SuperSudoku
             newBox.TextAlign = HorizontalAlignment.Center;
             newBox.MaxLength = 1;
             newBox.Margin = new Padding(1);
+            // When the box is focused
             newBox.Enter += (object sender, EventArgs e) =>
             {
+                newBox.SelectAll();
                 if (this.onSelect != null) this.onSelect(row, col);
             };
-            // Only allow digits
+            newBox.Click += (object sender, EventArgs e) => newBox.SelectAll();
+            // When a key is pressed in the box
             newBox.KeyPress += (object sender, KeyPressEventArgs e) =>
             {
+                // Only allow digits
                 if ((!char.IsControl(e.KeyChar)
                     && !char.IsDigit(e.KeyChar))
                     || e.KeyChar == '0')
@@ -170,7 +174,7 @@ namespace SuperSudoku
                     newBox.SelectAll();
                 }
             };
-            // Change focus
+            // Special keys change hte focus
             newBox.KeyDown += (object sender, KeyEventArgs e) =>
             {
                 switch (e.KeyData)
