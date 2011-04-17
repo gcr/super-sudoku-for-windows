@@ -67,12 +67,9 @@ namespace SuperSudoku
                 int num = rand.Next(1, 10);
                 if (!row.Contains(num))
                 {
+                    grid.Set(num, false, row.Count, 0);
                     row.Add(num);
                 }
-            }
-            for (int i = 0; i < 9; i++)
-            {
-                grid.Set(row[i], false, i, 0);
             }
 
             // Top column
@@ -80,14 +77,11 @@ namespace SuperSudoku
             while (row.Count < 9)
             {
                 int num = rand.Next(1, 10);
-                if (!row.Contains(num))
+                grid.Set(num, false, 0, row.Count);
+                if (!row.Contains(num) && solver.FindErrors(grid).Count == 0)
                 {
                     row.Add(num);
                 }
-            }
-            for (int i = 0; i < 9; i++)
-            {
-                grid.Set(row[i], false, 0, i);
             }
 
             // Now, solve the grid.

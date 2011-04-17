@@ -5,6 +5,23 @@ using System.Text;
 
 namespace SuperSudoku
 {
+    /// <summary>
+    /// This is simply a helper class that holds one cell to consider in the
+    /// recursive search.
+    /// </summary>
+    public class CellConsideration
+    {
+        public int Row;
+        public int Col;
+        public List<int> PossibleValues;
+        public CellConsideration(int row, int col, List<int> possibleValues)
+        {
+            this.Row = row;
+            this.Col = col;
+            this.PossibleValues = possibleValues;
+        }
+    }
+
     public class Solver
     {
 
@@ -21,19 +38,42 @@ namespace SuperSudoku
         /// </returns>
         public bool Solve(Grid grid)
         {
-            // awwwwh yeah
-            Random r = new Random();
-            for (int row = 0; row < 9; row++)
+            // if the grid is solved, return true
+            // find all tests for all squares
+            // for each cell in considerations:
+            //   for each item in cell.possibleValues:
+            //      store old item
+            //      set the new cell to the new item
+            //      if recurse: return true, else
+            //      set the new cell back to the old item
+            bool hasErrors = FindErrors(grid).Count > 0;
+            if (grid.IsFull() || hasErrors)
             {
-                for (int col = 0; col < 9; col++)
+                return !hasErrors;
+            }
+            else
+            {
+                // the grid is not full
+                List<CellConsideration> considerations = Consider(grid);
+                foreach (CellConsideration cell in considerations)
                 {
-                    if (grid.IsEditable(row, col))
+                    int oldValue = grid.Get(cell.Row, cell.Col);
+                    foreach (int hint in cell.PossibleValues)
                     {
-                        grid.Set(r.Next(1, 10), true, row, col);
+                        grid.Set(hint, true, cell.Row, cell.Col);
+                        if (Solve(grid))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            grid.Set(oldValue, true, cell.Row, cell.Col);
+                        }
                     }
                 }
+                // unsolvable
+                return false;
             }
-            return true;
         }
 
 
@@ -56,6 +96,30 @@ namespace SuperSudoku
                 }
             }
             return results;
+        }
+
+
+        /// <summary>
+        /// Considers each cell of the grid.
+        /// </summary>
+        /// <returns>
+        /// Returns is a list of CellConsiderations. Traverse this list in order.
+        /// </returns>
+        private List<CellConsideration> Consider(Grid grid)
+        {
+            List<CellConsideration> cells = new List<CellConsideration>();
+            for (int row = 0; row < 9; row++)
+            {
+                for (int col = 0; col < 9; col++)
+                {
+                    List<int> hints = GetHintsFor(grid, row, col);
+                    if (grid.Get(row, col) == 0 && hints.Count > 0)
+                    {
+                        cells.Add(new CellConsideration(row, col, hints));
+                    }
+                }
+            }
+            return cells.OrderBy((CellConsideration a) => a.PossibleValues.Count).ToList();
         }
 
 
