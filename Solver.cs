@@ -24,6 +24,9 @@ namespace SuperSudoku
 
     public class Solver
     {
+        private Random rand = new Random();
+
+        private int tries = 0;
 
         /// <summary>
         /// Solves the grid in-place.
@@ -38,42 +41,28 @@ namespace SuperSudoku
         /// </returns>
         public bool Solve(Grid grid)
         {
-            // if the grid is solved, return true
-            // find all tests for all squares
-            // for each cell in considerations:
-            //   for each item in cell.possibleValues:
-            //      store old item
-            //      set the new cell to the new item
-            //      if recurse: return true, else
-            //      set the new cell back to the old item
-            bool hasErrors = FindErrors(grid).Count > 0;
-            if (grid.IsFull() || hasErrors)
+            tries++;
+            //FillSingletons(grid);
+            bool valid = FindErrors(grid).Count == 0;
+            if (grid.IsFull() || !valid)
             {
-                return !hasErrors;
-            }
-            else
-            {
-                // the grid is not full
-                List<CellConsideration> considerations = Consider(grid);
-                foreach (CellConsideration cell in considerations)
+                if (!valid)
                 {
-                    int oldValue = grid.Get(cell.Row, cell.Col);
-                    foreach (int hint in cell.PossibleValues)
-                    {
-                        grid.Set(hint, true, cell.Row, cell.Col);
-                        if (Solve(grid))
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            grid.Set(oldValue, true, cell.Row, cell.Col);
-                        }
-                    }
+                    throw new Exception("WTF");
                 }
-                // unsolvable
-                return false;
+                return valid;
             }
+            List<CellConsideration> considerations = Consider(grid);
+            foreach (CellConsideration cell in considerations) {
+                foreach (int hint in cell.PossibleValues.OrderBy((v) => rand.Next())) {
+                    grid.Set(hint, true, cell.Row, cell.Col);
+                    if (Solve(grid)) {
+                        return true;
+                    }
+                    grid.Set(0, true, cell.Row, cell.Col);
+                }
+            }
+            return false;
         }
 
 
@@ -120,6 +109,20 @@ namespace SuperSudoku
                 }
             }
             return cells.OrderBy((CellConsideration a) => a.PossibleValues.Count).ToList();
+        }
+
+        /// <summary>
+        /// Fills in cells that only have one possible value
+        /// </summary>
+        /// <returns>whether I touched the grid in any way</returns>
+        private void FillSingletons(Grid grid)
+        {
+            List<CellConsideration> considerations = Consider(grid);
+            if (considerations.Count > 0 && considerations[0].PossibleValues.Count == 1)
+            {
+                grid.Set(considerations[0].PossibleValues[0], true, considerations[0].Row, considerations[0].Col);
+                FillSingletons(grid);
+            }
         }
 
 
