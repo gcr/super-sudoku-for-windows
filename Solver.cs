@@ -5,22 +5,26 @@ using System.Text;
 
 namespace SuperSudoku
 {
-    /// <summary>
-    /// This is simply a helper class that holds one cell to consider in the
-    /// recursive search.
-    /// </summary>
-    public class CellConsideration
-    {
-        public int Row;
-        public int Col;
-        public List<int> PossibleValues;
-        public CellConsideration(int row, int col, List<int> possibleValues)
-        {
-            this.Row = row;
-            this.Col = col;
-            this.PossibleValues = possibleValues;
-        }
-    }
+    /*
+     * Depth-first search works great for puzzles that look like puzzles
+     * but performance is quite inhibitive for mostly empty grids where
+     * the first solution can be half the search space away.
+     * 
+     * To avoid an infuriatingly slow user experience, certain decisions
+     * must be made. I am going to use a different, more efficient algoricthm
+     * in slight violation of the design document.
+     * 
+     * Donld Knuth developed "Algorithm X," which solves sudoku puzzles by
+     * representing the state of a puzzle as a massive array that encapsulates
+     * both the state of the puzzle and the constraints placed upon the sudoku
+     * grid. Each row specifies a numeric value for one cell. One row could
+     * represent putting a '3' in the top-right corner, for example. Another
+     * row could represent putting a 5 in dead center.
+     * 
+     * The problem then becomes: Pick a subset of these rows that generates
+     * a valid solution.
+     * 
+     */
 
     public class Solver
     {
