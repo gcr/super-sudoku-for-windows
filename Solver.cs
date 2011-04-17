@@ -54,7 +54,7 @@ namespace SuperSudoku
             }
             List<CellConsideration> considerations = Consider(grid);
             foreach (CellConsideration cell in considerations) {
-                foreach (int hint in cell.PossibleValues.OrderBy((v) => rand.Next())) {
+                foreach (int hint in cell.PossibleValues) {
                     grid.Set(hint, true, cell.Row, cell.Col);
                     if (Solve(grid)) {
                         return true;
