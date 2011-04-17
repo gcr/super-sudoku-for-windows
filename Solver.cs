@@ -35,18 +35,18 @@ namespace SuperSudoku
 
     public class Solver
     {
-        private List<int> Encode(int major, int minor)
+        private int[] Encode(int major, int minor)
         {
-            List<int> result = Enumerable.Repeat(0, 81).ToList();
+            int[] result = Enumerable.Repeat(0, 81).ToArray();
             result[major * 9 + minor] = 1;
             return result;
         }
 
-        private void Decode(List<int> row, out int major, out int minor)
+        private void Decode(int[] row, out int major, out int minor)
         {
             major = 0;
             minor = 0;
-            for (int i = 0; i < row.Count; i++)
+            for (int i = 0; i < row.Length; i++)
             {
                 if (row[i] == 1)
                 {
@@ -57,7 +57,7 @@ namespace SuperSudoku
             }
         }
 
-        private List<int> EncodeCell(int val, int row, int col)
+        private int[] EncodeCell(int val, int row, int col)
         {
             // The first 81 columns represent the constraint
             // that the certain cell is filled.
@@ -71,20 +71,20 @@ namespace SuperSudoku
                 // The final 81 columnss represent the constraint
                 // that each box has this number.
                    Encode(val, (row - (row % 3)) + (col / 3))
-            ))).ToList();
+            ))).ToArray();
         }
 
-        private void DecodeCell(List<int> constraint, out int row, out int col, out int val)
+        private void DecodeCell(int[] constraint, out int row, out int col, out int val)
         {
             // grab the row and column out of the first 81 columns of the constraint
-            Decode(constraint.GetRange(0, 81).ToArray(), out row, out col);
+            Decode(constraint.ToList().GetRange(0, 81).ToArray(), out row, out col);
             // grab the value out of the next 81
-            Decode(constraint.GetRange(81, 81).ToArray(), out val, out row);
+            Decode(constraint.ToList().GetRange(81, 81).ToArray(), out val, out row);
         }
 
-        private List<List<int>> InitialBoard()
+        private List<int[]> InitialBoard()
         {
-            List<List<int>> result = new List<List<int>>();
+            List<int[]> result = new List<int[]>();
             for (int row = 0; row < 9; row++)
             {
                 for (int col = 0; col < 9; col++)
@@ -113,48 +113,24 @@ namespace SuperSudoku
         public bool Solve(Grid grid)
         {
             List<int[]> gridConstraints = InitialBoard();
-            DancingLinks();
+            DancingLinks(gridToColumnnodes(grid));
             return false;
         }
 
-        private List<List<int>> solutions = new List<int>;
-        public int[] DancingLinks(Dictionary<int, List<int>> grid)//, List<int> initialSolutions)
+        public int[] DancingLinks(ColumnNode header)
         {
+            /*
             if (grid.Count == 0)
             {
                 // empty
-                return new int[0];
+                return new int[] { };
             }
             else
             {
-                // colValues maps columns to [column, numberOfColumns]
-                // ordered by the number of 1s in each column
-                List<int> colValues = grid.Keys.Select((col,idx) => {
-                    return new int[2] { col, new List<int>(colValues[col]).Sum() };
-                }).OrderBy((cell) => cell[1]);
+                int[] columns = colmap(grid);
 
-                if (colValues[0][1] == 0)
-                {
-                    // cannot execute this
-                    return new int[0];
-                }
-                foreach (int[] colChoice in colValues)
-                {
-                    int col = colChoice[0];
-                    foreach (int rownum in grid[col].Select((v,r)=>r).Where((r)=>grid[col][r]==1);
-                    {
-                        // Include this row in the partial solution
-                        List<int> chosenColumns = grid.Keys.Where((col) => grid[col][rownum]==1);
-                        solutions.Add(chosenColumns);
-                        // For each column in chosenColumns:
-                        // For each row in the chosenColumn:
-                        // delete the row
-                        // then delete the column
-
-                    }
-                }
             }
-
+             */
             return new int[5];
         }
 
@@ -166,6 +142,23 @@ namespace SuperSudoku
                 columns[col] = grid.Select((row) => row[col]).Sum();
             }
             return columns;
+        }
+
+        private ColumnNode gridToColumnnodes(Grid grid)
+        {
+            ColumnNode header = new ColumnNode(-1, null, null, null, null);
+            header.Left = header;
+            header.Right = header;
+            header.Up = header;
+            header.Down = header;
+            for (int i = 0; i < 9; i++)
+            {
+                header.Left = new ColumnNode(i, header.Left, header, null, null);
+                header.Left.Up = header.Left.Right;
+                header.Left.Down = header.Left.Right;
+            }
+
+            return header;
         }
 
         /// <summary>
@@ -218,6 +211,37 @@ namespace SuperSudoku
                 }
             }
             return errors;
+        }
+    }
+
+    public class Node
+    {
+        public Node Left;
+        public Node Right;
+        public Node Down;
+        public Node Up;
+        public Node(Node l, Node r, Node d, Node u)
+        {
+            this.Left = l;
+            this.Right = r;
+            this.Up = u;
+            this.Down = d;
+        }
+        public Node()
+        {
+        }
+    }
+
+    public class ColumnNode : Node
+    {
+        public int Col;
+        public ColumnNode(int c, Node l, Node r, Node d, Node u)
+        {
+            Col = c;
+            Left = l;
+            Right = r;
+            Down = d;
+            Up = u;
         }
     }
 }
