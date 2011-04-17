@@ -35,18 +35,18 @@ namespace SuperSudoku
 
     public class Solver
     {
-        private int[] Encode(int major, int minor)
+        private List<int> Encode(int major, int minor)
         {
-            int[] result = Enumerable.Repeat(0, 81).ToArray();
+            List<int> result = Enumerable.Repeat(0, 81).ToList();
             result[major * 9 + minor] = 1;
             return result;
         }
 
-        private void Decode(int[] row, out int major, out int minor)
+        private void Decode(List<int> row, out int major, out int minor)
         {
             major = 0;
             minor = 0;
-            for (int i = 0; i < row.Length; i++)
+            for (int i = 0; i < row.Count; i++)
             {
                 if (row[i] == 1)
                 {
@@ -57,39 +57,40 @@ namespace SuperSudoku
             }
         }
 
-        private int[] EncodeCell(int val, int row, int col)
+        private List<int> EncodeCell(int val, int row, int col)
         {
             // The first 81 columns represent the constraint
             // that the certain cell is filled.
             return Encode(row, col).Concat(
                 // The next 81 columns represent the constraint
                 // that each row has this number.
-                   Encode(val, row).Concat(
+                   Encode(val-1, row).Concat(
                 // The next 81 columns represent the constraint
                 // that each column has this number.
-                   Encode(val, col).Concat(
+                   Encode(val-1, col).Concat(
                 // The final 81 columnss represent the constraint
                 // that each box has this number.
-                   Encode(val, (row - (row % 3)) + (col / 3))
-            ))).ToArray();
+                   Encode(val-1, (row - (row % 3)) + (col / 3))
+            ))).ToList();
         }
 
-        private void DecodeCell(int[] constraint, out int row, out int col, out int val)
+        private void DecodeCell(List<int> constraint, out int row, out int col, out int val)
         {
             // grab the row and column out of the first 81 columns of the constraint
-            Decode(constraint.ToList().GetRange(0, 81).ToArray(), out row, out col);
+            Decode(constraint.GetRange(0, 81).ToList(), out row, out col);
             // grab the value out of the next 81
-            Decode(constraint.ToList().GetRange(81, 81).ToArray(), out val, out row);
+            Decode(constraint.GetRange(81, 81).ToList(), out val, out row);
+            val = val + 1;
         }
 
-        private List<int[]> InitialBoard()
+        private List<List<int>> InitialBoard()
         {
-            List<int[]> result = new List<int[]>();
+            List<List<int>> result = new List<List<int>>();
             for (int row = 0; row < 9; row++)
             {
                 for (int col = 0; col < 9; col++)
                 {
-                    for (int val = 0; val < 9; val++)
+                    for (int val = 1; val < 10; val++)
                     {
                         result.Add(EncodeCell(val, row, col));
                     }
@@ -98,6 +99,8 @@ namespace SuperSudoku
             return result;
         }
 
+
+        List<Node> solutions = new List<Node>();
 
         /// <summary>
         /// Solves the grid in-place.
@@ -112,51 +115,141 @@ namespace SuperSudoku
         /// </returns>
         public bool Solve(Grid grid)
         {
-            List<int[]> gridConstraints = InitialBoard();
-            DancingLinks(gridToColumnnodes(grid));
+            List<List<int>> gridConstraints = InitialBoard();
+            solutions = new List<Node>();
+            try
+            {
+                DancingLinks(gridToColumnnodes(gridConstraints));
+            } catch (Exception e) {
+                foreach (Node row in solutions) {
+                    List<int> constraint = Enumerable.Repeat(0, 324).ToList();
+                    constraint[((ColumnNode)row.GetColumn()).Col] = 1;
+                    for (Node right = row.Right; right != row; right = right.Right)
+                    {
+                        constraint[((ColumnNode)right.GetColumn()).Col] = 1;
+                    }
+
+                    int r;
+                    int c;
+                    int v;
+                    DecodeCell(constraint, out r, out c, out v);
+                    grid.Set(v, true, r, c);
+                }
+            }
             return false;
         }
 
-        public int[] DancingLinks(ColumnNode header)
+        public bool HasZero(ColumnNode header)
         {
-            /*
-            if (grid.Count == 0)
+            for (Node right = header.Right; right != header; right = right.Right)
             {
-                // empty
-                return new int[] { };
+                if (right.Up == right)
+                {
+                    return true;
+                }
             }
-            else
-            {
-                int[] columns = colmap(grid);
-
-            }
-             */
-            return new int[5];
+            return false;
         }
 
-        private int[] colmap(List<int[]> grid)
+        public void DancingLinks(ColumnNode header)
         {
-            int[] columns = new int[9];
-            for (int col = 0; col < 9; col++)
-            {
-                columns[col] = grid.Select((row) => row[col]).Sum();
+            if (header.Right == header) {
+                // No columns left
+                throw new Exception("HUZZAH");
+            } else {
+                if (!HasZero(header))
+                {
+                    for (ColumnNode col = (ColumnNode)header.Right; col != header; col = (ColumnNode)col.Right)
+                    {
+                        cover(col);
+                        for (Node row = col.Down; row != col; row = row.Down)
+                        {
+                            solutions.Add(row);
+                            for (Node right = row.Right; right != row; right = right.Right)
+                            {
+                                cover(right);
+                            }
+                            DancingLinks(header);
+                            solutions.Remove(row);
+                            for (Node left = row.Left; left != row; left = left.Left)
+                            {
+                                uncover(left);
+                            }
+                        }
+                        uncover(col);
+                    }
+                }
             }
-            return columns;
         }
 
-        private ColumnNode gridToColumnnodes(Grid grid)
+        private void cover(Node node)
         {
-            ColumnNode header = new ColumnNode(-1, null, null, null, null);
+            Node col = node.GetColumn();
+            col.Right.Left = col.Left;
+            col.Left.Right = col.Right;
+            for (Node row = col.Down; row != col; row = row.Down)
+            {
+                for (Node right = row.Right; right != row; right = right.Right)
+                {
+                    right.Up.Down = right.Down;
+                    right.Down.Up = right.Up;
+                }
+            }
+        }
+
+        private void uncover(Node node)
+        {
+            Node col = node.GetColumn();
+            for (Node row = col.Up; row != col; row = row.Up)
+            {
+                for (Node left = row.Left; left != row; left = left.Left) // TODO ??
+                {
+                    left.Up.Down = left.Down;
+                    left.Down.Up = left.Up;
+                }
+                col.Right.Left = col.Left;
+                col.Left.Right = col.Right;
+            }
+        }
+
+        private ColumnNode gridToColumnnodes(List<List<int>> grid)
+        {
+            ColumnNode header = new ColumnNode(-1, null, null);
             header.Left = header;
             header.Right = header;
-            header.Up = header;
-            header.Down = header;
-            for (int i = 0; i < 9; i++)
+            //List<ColumnNode> headers = Enumerable.Range(0, 9).Select((i) => new ColumnNode(i, null, null, null, null)).ToList();
+            List<Node> columns = new List<Node>();
+            for (int i = 0; i < grid[0].Count; i++)
             {
-                header.Left = new ColumnNode(i, header.Left, header, null, null);
-                header.Left.Up = header.Left.Right;
-                header.Left.Down = header.Left.Right;
+                ColumnNode newNode = new ColumnNode(i, header.Left, header);
+                newNode.Left.Right = newNode;
+                newNode.Right.Left = newNode;
+                columns.Add(newNode);
             }
+
+            // Now that we have the header all linked up, go ahead and
+            // go row-wise and add each node.
+            foreach (List<int> row in grid)
+            {
+                List<Node> rowNodes = new List<Node>();
+                for (int col = 0; col < row.Count; col++)
+                {
+                    if (row[col] == 1)
+                    {
+                        Node newNode = new Node(null, null, columns[col], columns[col].Up);
+                        columns[col].Up.Down = newNode;
+                        columns[col].Up = newNode;
+                        rowNodes.Add(newNode);
+                    }
+                }
+                for (int i = 0; i < rowNodes.Count; i++)
+                {
+                    // then link them up left/right
+                    rowNodes[i].Right = rowNodes[(i + 1) % rowNodes.Count];
+                    rowNodes[i].Left = rowNodes[(i - 1 + rowNodes.Count) % rowNodes.Count];
+                }
+            }
+
 
             return header;
         }
@@ -216,32 +309,40 @@ namespace SuperSudoku
 
     public class Node
     {
-        public Node Left;
-        public Node Right;
-        public Node Down;
-        public Node Up;
+        public Node Left = null;
+        public Node Right = null;
+        public Node Down = null;
+        public Node Up = null;
         public Node(Node l, Node r, Node d, Node u)
         {
-            this.Left = l;
-            this.Right = r;
-            this.Up = u;
-            this.Down = d;
+            Left = l;
+            Right = r;
+            Down = d;
+            Up = u;
         }
         public Node()
         {
+        }
+        public Node GetColumn()
+        {
+            Node findColumn = this;
+            while (! (findColumn is ColumnNode)) {
+                findColumn = findColumn.Up;
+            }
+            return findColumn;
         }
     }
 
     public class ColumnNode : Node
     {
         public int Col;
-        public ColumnNode(int c, Node l, Node r, Node d, Node u)
+        public ColumnNode(int c, Node l, Node r)
         {
             Col = c;
             Left = l;
             Right = r;
-            Down = d;
-            Up = u;
+            Down = this;
+            Up = this;
         }
     }
 }
