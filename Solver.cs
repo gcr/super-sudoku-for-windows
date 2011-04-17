@@ -119,7 +119,16 @@ namespace SuperSudoku
             solutions = new List<Node>();
             try
             {
-                DancingLinks(gridToColumnnodes(gridConstraints));
+                ColumnNode header = gridToColumnnodes(gridConstraints);
+                grid.ForEachSquare((row, col, val) =>
+                {
+                    if (val != 0) {
+
+                    }
+                });
+                DancingLinks(header);
+
+
             } catch (Exception e) {
                 foreach (Node row in solutions) {
                     List<int> constraint = Enumerable.Repeat(0, 324).ToList();
@@ -153,31 +162,33 @@ namespace SuperSudoku
 
         public void DancingLinks(ColumnNode header)
         {
-            if (header.Right == header) {
+            Console.WriteLine("DLX with " + solutions.Count + " solutions");
+            if (header.Right == header)
+            {
                 // No columns left
                 throw new Exception("HUZZAH");
-            } else {
+            }
+            else
+            {
                 if (!HasZero(header))
                 {
-                    for (ColumnNode col = (ColumnNode)header.Right; col != header; col = (ColumnNode)col.Right)
+                    ColumnNode col = (ColumnNode)header.Right;
+                    cover(col);
+                    for (Node row = col.Down; row != col; row = row.Down)
                     {
-                        cover(col);
-                        for (Node row = col.Down; row != col; row = row.Down)
+                        solutions.Add(row);
+                        for (Node right = row.Right; right != row; right = right.Right)
                         {
-                            solutions.Add(row);
-                            for (Node right = row.Right; right != row; right = right.Right)
-                            {
-                                cover(right);
-                            }
-                            DancingLinks(header);
-                            solutions.Remove(row);
-                            for (Node left = row.Left; left != row; left = left.Left)
-                            {
-                                uncover(left);
-                            }
+                            cover(right);
                         }
-                        uncover(col);
+                        DancingLinks(header);
+                        solutions.Remove(row);
+                        for (Node left = row.Left; left != row; left = left.Left)
+                        {
+                            uncover(left);
+                        }
                     }
+                    uncover(col);
                 }
             }
         }
@@ -204,12 +215,12 @@ namespace SuperSudoku
             {
                 for (Node left = row.Left; left != row; left = left.Left) // TODO ??
                 {
-                    left.Up.Down = left.Down;
-                    left.Down.Up = left.Up;
+                    left.Up.Down = left;
+                    left.Down.Up = left;
                 }
-                col.Right.Left = col.Left;
-                col.Left.Right = col.Right;
             }
+            col.Right.Left = col;
+            col.Left.Right = col;
         }
 
         private ColumnNode gridToColumnnodes(List<List<int>> grid)
