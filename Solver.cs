@@ -35,6 +35,13 @@ namespace SuperSudoku
 
     public class Solver
     {
+        private List<List<int>> Initial;
+
+        public Solver()
+        {
+            Initial = InitialBoard();
+        }
+
         private List<int> Encode(int major, int minor)
         {
             List<int> result = Enumerable.Repeat(0, 81).ToList();
@@ -74,13 +81,17 @@ namespace SuperSudoku
             ))).ToList();
         }
 
-        private void DecodeCell(List<int> constraint, out int row, out int col, out int val)
+        private void DecodeCell(List<int> constraint, out int val, out int row, out int col)
         {
             // grab the row and column out of the first 81 columns of the constraint
             Decode(constraint.GetRange(0, 81).ToList(), out row, out col);
             // grab the value out of the next 81
             Decode(constraint.GetRange(81, 81).ToList(), out val, out row);
             val = val + 1;
+            if (val == 0)
+            {
+                throw new Exception("WTF");
+            }
         }
 
         private List<List<int>> InitialBoard()
@@ -115,17 +126,45 @@ namespace SuperSudoku
         /// </returns>
         public bool Solve(Grid grid)
         {
-            List<List<int>> gridConstraints = InitialBoard();
+            // fail fast
+            if (FindErrors(grid).Count > 0)
+            {
+                return false;
+            }
+
+            List<List<int>> gridConstraints = Initial.Select((row) => row.Select((c) => c).ToList()).ToList();
+            /*foreach (List<int> row in gridConstraints.Where((row) => row[81] == 1))
+            {
+                int r, v, c;
+                DecodeCell(row, out v, out r, out c);
+                Console.WriteLine("Constraint: val " + v + " at " + r + "," + c);
+                Console.WriteLine("this column is " + (r * 9 + c));
+            }*/
             solutions = new List<Node>();
             try
             {
                 ColumnNode header = gridToColumnnodes(gridConstraints);
                 grid.ForEachSquare((row, col, val) =>
                 {
+                    // first, we remove every constraint that's already
+                    // satisfied in the (current) grid
                     if (val != 0) {
-
+                        List<int> removeColumns = EncodeCell(val, row, col);
+                        removeColumns = removeColumns.Select((r, i) => i).Where((i) => removeColumns[i] == 1).ToList();
+                        
+                        // now remove the rows w/ this constraint
+                        for (ColumnNode seekCol = (ColumnNode)header.Right; seekCol != header; seekCol = (ColumnNode)seekCol.Right)
+                        {
+                            if (removeColumns.Contains(seekCol.Col))
+                            {
+                                //Console.WriteLine("Removing col " + seekCol.Col);
+                                cover(seekCol);
+                            }
+                        }
                     }
                 });
+
+                // now that we've cleaned up the original, run DLX!
                 DancingLinks(header);
 
 
@@ -141,9 +180,10 @@ namespace SuperSudoku
                     int r;
                     int c;
                     int v;
-                    DecodeCell(constraint, out r, out c, out v);
+                    DecodeCell(constraint, out v, out r, out c);
                     grid.Set(v, true, r, c);
                 }
+                return true;
             }
             return false;
         }
@@ -162,7 +202,7 @@ namespace SuperSudoku
 
         public void DancingLinks(ColumnNode header)
         {
-            Console.WriteLine("DLX with " + solutions.Count + " solutions");
+            //Console.WriteLine("DLX with " + solutions.Count + " solutions");
             if (header.Right == header)
             {
                 // No columns left
