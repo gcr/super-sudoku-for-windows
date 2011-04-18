@@ -44,21 +44,23 @@ namespace SuperSudoku
             tries++;
             //FillSingletons(grid);
             //bool valid = FindErrors(grid).Count == 0;
+            CellConsideration cell = Consider(grid);
             if (grid.IsFull())// || !valid)
             {
                 return true;//valid;
             }
-            CellConsideration cell = Consider(grid);
             if (cell != null)
             {
                 foreach (int hint in cell.PossibleValues)
                 {
+                    //Grid oldGrid = grid.Copy();
                     grid.Set(hint, true, cell.Row, cell.Col);
                     if (Solve(grid))
                     {
                         return true;
                     }
                     grid.Set(0, true, cell.Row, cell.Col);
+                    //grid.CopyFrom(oldGrid);
                 }
             }
 
@@ -107,6 +109,9 @@ namespace SuperSudoku
                     if (grid.Get(row, col) == 0)
                     {
                         List<int> hints = GetHintsFor(grid, row, col);
+                        /*if (hints.Count == 1) {
+                            grid.Set(hints[0], true, row, col);
+                        } else*/
                         if (hints.Count > 0 && hints.Count < smallestNOfHints)
                         {
                             smallestConsideration = new CellConsideration(row, col, hints);
