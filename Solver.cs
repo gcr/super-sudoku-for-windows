@@ -27,8 +27,6 @@ namespace SuperSudoku
     {
         private Random rand = new Random();
 
-        private int tries = 0;
-
         /// <summary>
         /// Solves the grid in-place.
         /// </summary>
@@ -43,55 +41,41 @@ namespace SuperSudoku
         public bool Solve(Grid grid)
         {
             int numSolutions = 0;
-            /*if (FindErrors(grid).Count > 0)
+            if (FindErrors(grid).Count > 0)
             {
                 // fail fast!
                 return false;
-            }*/
-            try
-            {
-                DepthFirstSearch(grid, () =>
-                {
-                    numSolutions = numSolutions + 1;
-                    if (numSolutions > 1)
-                    {
+            }
+
+            try {
+                DepthFirstSearch(grid, () => {
+                    numSolutions++;
+                    if (numSolutions > 1) {
                         throw new StopIterationException();
                     }
                 });
             }
-            catch (Exception e)
-            {
-                // We're done with the solution findings
-                // nothing bad; but i just don't have python's generators.
-            }
+            catch (StopIterationException e) { }
 
             return numSolutions == 1;
         }
 
-        public void DepthFirstSearch(Grid grid, Action eachSolution)
+        public void DepthFirstSearch(Grid grid, Action eachSolutionAction)
         {
-            bool valid = FindErrors(grid).Count == 0;
             CellConsideration cell = Consider(grid);
-            if (grid.IsFull() || !valid)
+            if (grid.IsFull())// || !valid)
             {
-                if (valid)
-                {
-                    eachSolution();
-                }
+                eachSolutionAction();
             }
             else if (cell != null)
             {
                 foreach (int hint in cell.PossibleValues)
                 {
                     grid.Set(hint, true, cell.Row, cell.Col);
-                    DepthFirstSearch(grid, eachSolution);
+                    DepthFirstSearch(grid, eachSolutionAction);
                     grid.Set(0, true, cell.Row, cell.Col);
                 }
             }
-            // for the record, this code would be MUCH easier to read
-            // if we could return things inside the function body, uggghhh
-
-            // i hereby challenge al to a swordfight at high noon with my copy of SCIP
         }
 
 
