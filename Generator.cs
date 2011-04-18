@@ -92,10 +92,10 @@ namespace SuperSudoku
                 switch (difficulty)
                 {
                     case DifficultyLevel.Easy:
-                        targetBlanks = 40;
+                        targetBlanks = 30;
                         break;
                     case DifficultyLevel.Medium:
-                        targetBlanks = 50;
+                        targetBlanks = 45;
                         break;
                     case DifficultyLevel.Hard:
                         targetBlanks = 60;
