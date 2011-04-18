@@ -107,7 +107,12 @@ namespace SuperSudoku
                 while (tries < 1000 && CountBlank(grid) < targetBlanks)
                 {
                     Grid saveCopy = grid.Copy();
-                    MaybeRandomBlank(grid);
+                    // Solving is expensive. Picking squares to blank is easy!
+                    // we'll just try the extra time.
+                    for (int i = 0; i < (targetBlanks - CountBlank(grid))/2 + 1; i++)
+                    {
+                        MaybeRandomBlank(grid);
+                    }
                     if (!solver.Solve(grid.Copy()))
                     {
                         // it failed
@@ -115,6 +120,7 @@ namespace SuperSudoku
                     }
                     tries++;
                 }
+                Console.WriteLine("Generated puzzle in " + tries + " tries");
 
                 // finally, set every square to be not editable
                 grid.ForEachSquare((r, c, val) =>

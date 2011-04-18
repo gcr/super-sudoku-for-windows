@@ -20,6 +20,7 @@ namespace SuperSudoku
         private int gameTime = 0;
 
         private bool nagAboutErrors = true;
+        private bool nagAboutWonGame = true;
 
         private bool isPlaying;
 
@@ -56,6 +57,7 @@ namespace SuperSudoku
             gcontrol.CellClear += (int row, int col) =>
             {
                 nagAboutErrors = true;
+                nagAboutWonGame = true;
                 RecalculateErrors();
                 RecalculateHints(row, col);
                 ShowOrHideHintBar();
@@ -66,7 +68,10 @@ namespace SuperSudoku
             {
                 MaybeTryGameOver();
                 RecalculateErrors();
-                RecalculateHints(row, col);
+                if (isPlaying)
+                {
+                    RecalculateHints(row, col);
+                }
                 ShowOrHideHintBar();
             };
 
@@ -123,8 +128,9 @@ namespace SuperSudoku
                     }
                     nagAboutErrors = false;
                 }
-                else
+                else if (nagAboutWonGame)
                 {
+                    nagAboutWonGame = false;
                     MessageBox.Show("Good job! Your time: "+formatGameTime());
                 }
             }
@@ -273,7 +279,10 @@ namespace SuperSudoku
             {
                 if (MessageBox.Show("Are you sure you want the computer to solve the puzzle?", "Solve now?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    solver.Solve(grid);
+                    if (!solver.Solve(grid))
+                    {
+                        MessageBox.Show("This puzzle has errors. Erase some of your work and try again.");
+                    }
                     gcontrol.UpdateGridView();
                 }
             }
