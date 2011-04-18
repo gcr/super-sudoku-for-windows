@@ -40,10 +40,10 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.loadButton, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.editButton, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.generateButton, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.loadButton, 0, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -52,15 +52,15 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(465, 400);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(393, 340);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // loadButton
             // 
             this.loadButton.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.loadButton.Location = new System.Drawing.Point(47, 323);
+            this.loadButton.Location = new System.Drawing.Point(68, 273);
             this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(371, 54);
+            this.loadButton.Size = new System.Drawing.Size(256, 48);
             this.loadButton.TabIndex = 3;
             this.loadButton.Text = "Load Game";
             this.loadButton.UseVisualStyleBackColor = true;
@@ -69,9 +69,9 @@
             // editButton
             // 
             this.editButton.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.editButton.Location = new System.Drawing.Point(47, 223);
+            this.editButton.Location = new System.Drawing.Point(68, 188);
             this.editButton.Name = "editButton";
-            this.editButton.Size = new System.Drawing.Size(371, 54);
+            this.editButton.Size = new System.Drawing.Size(256, 48);
             this.editButton.TabIndex = 2;
             this.editButton.Text = "Enter Blank Puzzle";
             this.editButton.UseVisualStyleBackColor = true;
@@ -81,9 +81,10 @@
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(36, 33);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(48, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(392, 33);
+            this.label1.Size = new System.Drawing.Size(297, 25);
             this.label1.TabIndex = 0;
             this.label1.Text = "Welcome to Super Sudoku!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -91,9 +92,9 @@
             // generateButton
             // 
             this.generateButton.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.generateButton.Location = new System.Drawing.Point(47, 123);
+            this.generateButton.Location = new System.Drawing.Point(68, 103);
             this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new System.Drawing.Size(371, 54);
+            this.generateButton.Size = new System.Drawing.Size(256, 48);
             this.generateButton.TabIndex = 1;
             this.generateButton.Text = "Generate Puzzle";
             this.generateButton.UseVisualStyleBackColor = true;
@@ -103,7 +104,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 400);
+            this.ClientSize = new System.Drawing.Size(393, 340);
             this.Controls.Add(this.tableLayoutPanel1);
             this.MaximizeBox = false;
             this.Name = "WelcomeForm";
