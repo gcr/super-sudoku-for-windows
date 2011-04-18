@@ -120,7 +120,7 @@ namespace SuperSudoku
                     }
                     tries++;
                 }
-                Console.WriteLine("Generated puzzle in " + tries + " tries");
+                Console.WriteLine("Generated puzzle in " + tries + " tries with "+CountBlank(grid)+" blanks");
 
                 // finally, set every square to be not editable
                 grid.ForEachSquare((r, c, val) =>

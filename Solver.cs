@@ -88,13 +88,14 @@ namespace SuperSudoku
         /// </returns>
         public List<int> GetHintsFor(Grid grid, int row, int col)
         {
-            int[] gCols = grid.GetColumn(col);
-            int[] gRows = grid.GetRow(row);
-            int[] gSq = grid.GetSquareAbout(row, col);
+            List<int> stuff = grid.GetColumn(col).Concat(grid.GetRow(row)).Concat(grid.GetSquareAbout(row, col)).ToList();
+            //int[] gCols = grid.GetColumn(col);
+            //int[] gRows = grid.GetRow(row);
+            //int[] gSq = grid.GetSquareAbout(row, col);
             List<int> results = new List<int>();
             for (int i = 1; i <= 9; i++)
             {
-                if (!(gCols.Contains(i) || gRows.Contains(i) || gSq.Contains(i)))
+                if (!stuff.Contains(i))//(gCols.Contains(i) || gRows.Contains(i) || gSq.Contains(i)))
                 {
                     results.Add(i);
                 }
