@@ -35,10 +35,10 @@ namespace SuperSudoku
                         {
                             if (line[2 * (j - 1) + 1] == '-')
                             {
-                                grid.Set((0-(line[2 * (j - 1)] - 48)), true, i, j-1);
+                                grid.Set((0-(line[2 * (j - 1)] - 48)), false, i, j-1);
                             }
                             else {
-                                grid.Set(line[2 * (j - 1)] - 48, false, i, j-1);
+                                grid.Set(line[2 * (j - 1)] - 48, true, i, j-1);
                             }
                         }
                     }
@@ -48,8 +48,7 @@ namespace SuperSudoku
             catch (Exception e)
             {
                 // Let the user know what went wrong.
-                MessageBox.Show("The file could not be read.");
-                MessageBox.Show(e.Message);
+                MessageBox.Show("The file could not be read: '"+e.Message+"'");
                 return false;
             }
         }
@@ -72,10 +71,10 @@ namespace SuperSudoku
                         line += Math.Abs(grid.Get(i-1, j-1));
                         if (grid.IsEditable(i - 1, j - 1))
                         {
-                            line += '-';
+                            line += '+';
                         }
                         else{
-                            line += '+';
+                            line += '-';
                         }
                     }
                     file.WriteLine(line);
@@ -86,8 +85,7 @@ namespace SuperSudoku
             catch (Exception e)
             {
                 // Let the user know what went wrong.
-                MessageBox.Show("The file could not be written.");
-                MessageBox.Show(e.Message);
+                MessageBox.Show("The file could not be written: '"+e.Message+"'");
                 return false;
             }
         }
