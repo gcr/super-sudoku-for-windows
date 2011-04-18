@@ -28,17 +28,17 @@ namespace SuperSudoku
                     String line;
                     // Read and display lines from the file until the end of
                     // the file is reached.
-                    for (int i=1;i<10;i++)
+                    for (int i=0;i<9;i++)
                     {
                         line= sr.ReadLine();
                         for (int j = 1; j < 10; j++)
                         {
                             if (line[2 * (j - 1) + 1] == '-')
                             {
-                                grid.Set(-line[2 * (j - 1)] - 48, true, i, j);
+                                grid.Set((0-(line[2 * (j - 1)] - 48)), true, i, j-1);
                             }
                             else {
-                                grid.Set(line[2 * (i - 1)] - 48, false, i, j);
+                                grid.Set(line[2 * (j - 1)] - 48, false, i, j-1);
                             }
                         }
                     }
@@ -69,8 +69,8 @@ namespace SuperSudoku
                     string line = "";
                     for (int j = 1; j < 10; j++)
                     {
-                        line += Math.Abs(grid.Get(i-1, j-1))+48;
-                        if (grid.Get(i - 1, j - 1) < 0)
+                        line += Math.Abs(grid.Get(i-1, j-1));
+                        if (grid.IsEditable(i - 1, j - 1))
                         {
                             line += '-';
                         }
