@@ -65,7 +65,9 @@ namespace SuperSudoku
         /// <param name="form">This form will be hidden.</param>
         public static void GeneratePuzzle(Form form)
         {
+            Cursor.Current = Cursors.WaitCursor;
             DifficultyForm dform = new DifficultyForm();
+            Cursor.Current = Cursors.Default;
             dform.ShowDialog();
             if (dform.HasResult)
             {
