@@ -222,63 +222,70 @@ namespace SuperSudoku
              * 
              * 5. Extract the rest of the cells from the maze of currentConsideredNodes
              */
-            bool result;
             List<List<int>> gridConstraints = InitialCachedConstraints.Select((row) => row.Select((c) => c).ToList()).ToList();
             
             // reset
             currentConsideredConstraints = new List<Node>();
-            try
+            int nSolutions = 0;
+            // Convert initial grid constraints into links
+            ColumnNode header = gridConstraintsToPatchwork(gridConstraints);
+            grid.ForEachSquare((row, col, val) =>
             {
-                // Convert initial grid constraints into links
-                ColumnNode header = gridConstraintsToPatchwork(gridConstraints);
-                grid.ForEachSquare((row, col, val) =>
+                // Remove every constraint that's already
+                // satisfied in the (current) grid
+                if (val != 0)
                 {
-                    // Remove every constraint that's already
-                    // satisfied in the (current) grid
-                    if (val != 0) {
-                        // which columns to Cover? all of the columns in the grid cell's constraint!
-                        List<int> removeColumns = EncodeCellConstraint(val, row, col);
-                        removeColumns = removeColumns.Select((r, i) => i).Where((i) => removeColumns[i] == 1).ToList();
-                        
-                        // Now remove all constrained columns
-                        for (ColumnNode seekCol = (ColumnNode)header.Right; seekCol != header; seekCol = (ColumnNode)seekCol.Right)
+                    // which columns to Cover? all of the columns in the grid cell's constraint!
+                    List<int> removeColumns = EncodeCellConstraint(val, row, col);
+                    removeColumns = removeColumns.Select((r, i) => i).Where((i) => removeColumns[i] == 1).ToList();
+
+                    // Now remove all constrained columns
+                    for (ColumnNode seekCol = (ColumnNode)header.Right; seekCol != header; seekCol = (ColumnNode)seekCol.Right)
+                    {
+                        if (removeColumns.Contains(seekCol.Col))
                         {
-                            if (removeColumns.Contains(seekCol.Col))
-                            {
-                                CoverColumn(seekCol);
-                            }
+                            CoverColumn(seekCol);
                         }
                     }
-                });
-
-                // Now run dancing links
-                DancingLinks(header);
-                // if we got here, dancinglinks found no solution
-                result = false;
-
-            } catch (StopIterationException e) {
-                // oh how i pine for python's generators...
-                // Decode the solution.
-                foreach (Node constraintLink in currentConsideredConstraints) {
-                    // Each "constraint link" here represents one grid cell.
-                    // Convert it back into an "ordinary" constraint so we can work with it...
-                    List<int> constraint = Enumerable.Repeat(0, 324).ToList();
-                    constraint[((ColumnNode)constraintLink.GetColumn()).Col] = 1;
-                    for (Node right = constraintLink.Right; right != constraintLink; right = right.Right)
-                    {
-                        constraint[((ColumnNode)right.GetColumn()).Col] = 1;
-                    }
-
-                    // now that we have an ordinary constraint, extract the row, col, and value and
-                    // set the cell.
-                    int r,c,v;
-                    DecodeCellConstraint(constraint, out v, out r, out c);
-                    grid.Set(v, true, r, c);
                 }
-                result = true;
+            });
+
+            try
+            {
+                // Now run dancing links
+                DancingLinks(header, () => {
+                    // when we find something...
+                    nSolutions++;
+                    if (nSolutions > 1)
+                    {
+                        // Stop if we found more than one solution.
+                        throw new StopIterationException();
+                    }
+                    // oh how i pine for python's generators...
+                    // Decode the solution.
+                    foreach (Node constraintLink in currentConsideredConstraints)
+                    {
+                        // Each "constraint link" here represents one grid cell.
+                        // Convert it back into an "ordinary" constraint so we can work with it...
+                        List<int> constraint = Enumerable.Repeat(0, 324).ToList();
+                        constraint[((ColumnNode)constraintLink.GetColumn()).Col] = 1;
+                        for (Node right = constraintLink.Right; right != constraintLink; right = right.Right)
+                        {
+                            constraint[((ColumnNode)right.GetColumn()).Col] = 1;
+                        }
+
+                        // now that we have an ordinary constraint, extract the row, col, and value and
+                        // set the cell.
+                        int r, c, v;
+                        DecodeCellConstraint(constraint, out v, out r, out c);
+                        grid.Set(v, true, r, c);
+                    }
+                });
+            } catch (StopIterationException e) {
+                // we found more than one solution; terminate early.
             }
 
-            return result;
+            return nSolutions == 1;
         }
 
         /// <summary>
@@ -303,12 +310,12 @@ namespace SuperSudoku
         /// Knuth's actual "Dancing Links" algorithm.
         /// See http://www-cs-faculty.stanford.edu/~uno/papers/dancing.ps.gz
         /// </summary>
-        public void DancingLinks(ColumnNode header)
+        public void DancingLinks(ColumnNode header, Action eachSolution)
         {
             if (header.Right == header)
             {
                 // No columns left. This is a valid solution.
-                throw new StopIterationException();
+                eachSolution();
             }
             else
             {
@@ -330,7 +337,7 @@ namespace SuperSudoku
                             CoverColumn(right);
                         }
                         // recurse
-                        DancingLinks(header);
+                        DancingLinks(header, eachSolution);
                         // there was no solution, so remove this row from our "partial" solutions
                         // and uncover all the columns in this row
                         currentConsideredConstraints.Remove(row);
