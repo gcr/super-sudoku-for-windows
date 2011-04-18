@@ -279,7 +279,8 @@ namespace SuperSudoku
             {
                 if (MessageBox.Show("Are you sure you want the computer to solve the puzzle?", "Solve now?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    if (!solver.Solve(grid))
+                    bool canSolve = solver.Solve(grid);
+                    if (!grid.IsFull())
                     {
                         MessageBox.Show("This puzzle has errors. Erase some of your work and try again.");
                     }
@@ -333,7 +334,21 @@ namespace SuperSudoku
             }
             else
             {
-                hintBarText.Text = (solver.Solve(grid.Copy())) ? "" : "This puzzle cannot be solved.";
+                Grid copy = grid.Copy();
+                if (solver.Solve(copy))
+                {
+                    hintBarText.Text = "";
+                }
+                else
+                {
+                    if (copy.IsFull())
+                    {
+                        hintBarText.Text = "This puzzle has more than one solution.";
+                    }
+                    else {
+                        hintBarText.Text = "This puzzle cannot be solved.";
+                    }
+                }
             }
         }
 

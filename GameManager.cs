@@ -101,7 +101,9 @@ namespace SuperSudoku
                     grid.SetEditable(false, row, col);
                 }
             });
-            if ((new Solver().Solve(grid.Copy())))
+            Grid copyGrid = grid.Copy();
+            bool result = (new Solver().Solve(copyGrid));
+            if (result)
             {
                 form.Hide();
                 GameForm gform = new GameForm(grid, true);
@@ -110,7 +112,7 @@ namespace SuperSudoku
             }
             else
             {
-                if (MessageBox.Show("This puzzle cannot be solved. Continue editing?", "Unsolvable Puzzle", MessageBoxButtons.YesNo) == DialogResult.No)
+                if (MessageBox.Show(copyGrid.IsFull()? "This puzzle can be solved in more than one way. Play anyway?" : "This puzzle cannot be solved. Play anyway?", "Unsolvable Puzzle", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     form.Hide();
                     GameForm gform = new GameForm(grid, true);
