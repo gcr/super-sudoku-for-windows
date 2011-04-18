@@ -104,7 +104,7 @@ namespace SuperSudoku
 
                 // Remove squares until we have the right number of blanks.
                 int tries = 0;
-                while (tries < 1000 && CountBlank(grid) < targetBlanks)
+                while (tries < 100 && CountBlank(grid) < targetBlanks)
                 {
                     Grid saveCopy = grid.Copy();
                     // Solving is expensive. Picking squares to blank is easy!
