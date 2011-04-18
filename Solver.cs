@@ -21,6 +21,7 @@ namespace SuperSudoku
             this.PossibleValues = possibleValues;
         }
     }
+    public class StopIterationException : Exception { }
 
     public class Solver
     {
@@ -41,30 +42,56 @@ namespace SuperSudoku
         /// </returns>
         public bool Solve(Grid grid)
         {
-            tries++;
-            //FillSingletons(grid);
-            //bool valid = FindErrors(grid).Count == 0;
-            CellConsideration cell = Consider(grid);
-            if (grid.IsFull())// || !valid)
+            int numSolutions = 0;
+            /*if (FindErrors(grid).Count > 0)
             {
-                return true;//valid;
+                // fail fast!
+                return false;
+            }*/
+            try
+            {
+                DepthFirstSearch(grid, () =>
+                {
+                    numSolutions = numSolutions + 1;
+                    if (numSolutions > 1)
+                    {
+                        throw new StopIterationException();
+                    }
+                });
             }
-            if (cell != null)
+            catch (Exception e)
+            {
+                // We're done with the solution findings
+                // nothing bad; but i just don't have python's generators.
+            }
+
+            return numSolutions == 1;
+        }
+
+        public void DepthFirstSearch(Grid grid, Action eachSolution)
+        {
+            bool valid = FindErrors(grid).Count == 0;
+            CellConsideration cell = Consider(grid);
+            if (grid.IsFull() || !valid)
+            {
+                if (valid)
+                {
+                    eachSolution();
+                }
+            }
+            else if (cell != null)
             {
                 foreach (int hint in cell.PossibleValues)
                 {
-                    //Grid oldGrid = grid.Copy();
                     grid.Set(hint, true, cell.Row, cell.Col);
-                    if (Solve(grid))
-                    {
-                        return true;
-                    }
+                    DepthFirstSearch(grid, eachSolution);
                     grid.Set(0, true, cell.Row, cell.Col);
-                    //grid.CopyFrom(oldGrid);
                 }
             }
+            // for the record, this code would be MUCH easier to read
+            // if we could return things inside the function body, uggghhh
 
-            return false;
+            // i hereby challenge al to a swordfight at high noon with my copy of SCIP
         }
 
 
@@ -112,7 +139,14 @@ namespace SuperSudoku
                         /*if (hints.Count == 1) {
                             grid.Set(hints[0], true, row, col);
                         } else*/
-                        if (hints.Count > 0 && hints.Count < smallestNOfHints)
+                        if (hints.Count == 0)
+                        {
+                            // We found a square that has no solution
+                            // This means the current state of the puzzle is bogus
+                            // so stop.
+                            return null;
+                        }
+                        if (hints.Count < smallestNOfHints)
                         {
                             smallestConsideration = new CellConsideration(row, col, hints);
                             smallestNOfHints = hints.Count;
