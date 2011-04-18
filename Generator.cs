@@ -60,72 +60,74 @@ namespace SuperSudoku
             //    if it isn't uniquely solvable, add those two blanks again.
             Grid grid = GenerateBlankGrid();
 
+            Grid result;
+
             // Top row
-            List<int> row = new List<int>();
-            while (row.Count < 9)
+            List<int> row = Enumerable.Range(1, 9).OrderBy((i) => rand.Next()).ToList();
+            for (int i = 0; i < 9; i++)
             {
-                int num = rand.Next(1, 10);
-                if (!row.Contains(num))
-                {
-                    grid.Set(num, false, row.Count, 0);
-                    row.Add(num);
-                }
+                grid.Set(row[i], false, i, 0);
             }
 
             // Top column
-            row.RemoveRange(1, 8);
-            while (row.Count < 9)
+            row = Enumerable.Range(1, 9).OrderBy((i) => rand.Next()).ToList();
+            row.Remove(grid.Get(0, 0));
+            for (int i = 0; i < 8; i++)
             {
-                int num = rand.Next(1, 10);
-                grid.Set(num, false, 0, row.Count);
-                if (!row.Contains(num) && solver.FindErrors(grid).Count == 0)
-                {
-                    row.Add(num);
-                }
+                grid.Set(row[i], false, 0, i+1);
             }
 
-            // Now, solve the grid.
-            solver.Solve(grid);
-
-            // How many blanks do we need?
-            int targetBlanks = 0;
-            switch (difficulty)
+            if (solver.FindErrors(grid).Count > 0)
             {
-                case DifficultyLevel.Easy:
-                    targetBlanks = 40;
-                    break;
-                case DifficultyLevel.Medium:
-                    targetBlanks = 50;
-                    break;
-                case DifficultyLevel.Hard:
-                    targetBlanks = 60;
-                    break;
+                result = Generate(difficulty);
             }
-
-            // Remove squares until we have the right number of blanks.
-            int tries = 0;
-            while (tries < 1000 && CountBlank(grid) < targetBlanks)
+            else
             {
-                Grid saveCopy = grid.Copy();
-                MaybeRandomBlank(grid);
-                if (!solver.Solve(grid.Copy()))
+
+                // Now, solve the grid.
+                solver.Solve(grid);
+
+                // How many blanks do we need?
+                int targetBlanks = 0;
+                switch (difficulty)
                 {
-                    // it failed
-                    grid = saveCopy;
+                    case DifficultyLevel.Easy:
+                        targetBlanks = 40;
+                        break;
+                    case DifficultyLevel.Medium:
+                        targetBlanks = 50;
+                        break;
+                    case DifficultyLevel.Hard:
+                        targetBlanks = 60;
+                        break;
                 }
-                tries++;
+
+                // Remove squares until we have the right number of blanks.
+                int tries = 0;
+                while (tries < 1000 && CountBlank(grid) < targetBlanks)
+                {
+                    Grid saveCopy = grid.Copy();
+                    MaybeRandomBlank(grid);
+                    if (!solver.Solve(grid.Copy()))
+                    {
+                        // it failed
+                        grid = saveCopy;
+                    }
+                    tries++;
+                }
+
+                // finally, set every square to be not editable
+                grid.ForEachSquare((r, c, val) =>
+                {
+                    if (val != 0)
+                    {
+                        grid.SetEditable(false, r, c);
+                    }
+                });
+
+                result = grid;
             }
-
-            // finally, set every square to be not editable
-            grid.ForEachSquare((r, c, val) =>
-            {
-                if (val != 0)
-                {
-                    grid.SetEditable(false, r, c);
-                }
-            });
-
-            return grid;
+            return result;
         }
 
         /// <summary>

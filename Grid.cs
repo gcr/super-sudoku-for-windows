@@ -103,18 +103,7 @@ namespace SuperSudoku
         /// </summary>
         public int[] GetColumn(int col)
         {
-            return new int[] {
-                Math.Abs(elts[0][col]),
-                Math.Abs(elts[1][col]),
-                Math.Abs(elts[2][col]),
-                Math.Abs(elts[3][col]),
-                Math.Abs(elts[4][col]),
-                Math.Abs(elts[5][col]),
-                Math.Abs(elts[6][col]),
-                Math.Abs(elts[7][col]),
-                Math.Abs(elts[8][col])
-            };
-            //return elts.Select((row) => Math.Abs(row[col])).ToArray();
+            return elts.Select((row) => Math.Abs(row[col])).ToArray();
         }
 
         /// <summary>
@@ -122,18 +111,7 @@ namespace SuperSudoku
         /// </summary>
         public int[] GetRow(int row)
         {
-            return new int[] {
-                Math.Abs(elts[row][0]),
-                Math.Abs(elts[row][1]),
-                Math.Abs(elts[row][2]),
-                Math.Abs(elts[row][3]),
-                Math.Abs(elts[row][4]),
-                Math.Abs(elts[row][5]),
-                Math.Abs(elts[row][6]),
-                Math.Abs(elts[row][7]),
-                Math.Abs(elts[row][8])
-            };
-            //return (int[])elts[row].Select((item) => Math.Abs(item)).ToArray();
+            return (int[])elts[row].Select((item) => Math.Abs(item)).ToArray();
         }
 
         /// <summary>
@@ -165,7 +143,7 @@ namespace SuperSudoku
             // This is the top left corner of the square encompassing
             // the given cell.
 
-            /*int[] result = new int[9];
+            int[] result = new int[9];
 
             for (int i = 0; i < 3; i++)
             {
@@ -174,18 +152,7 @@ namespace SuperSudoku
                     result[i*3+j] = Math.Abs(this.elts[i + sqRow][j + sqCol]);
                 }
             }
-            return result;*/
-            return new int[] {
-                elts[sqRow][sqCol],
-                elts[sqRow][sqCol+1],
-                elts[sqRow][sqCol+2],
-                elts[sqRow+1][sqCol],
-                elts[sqRow+1][sqCol+1],
-                elts[sqRow+1][sqCol+2],
-                elts[sqRow+2][sqCol],
-                elts[sqRow+2][sqCol+1],
-                elts[sqRow+2][sqCol+2]
-            };
+            return result;
         }
 
 

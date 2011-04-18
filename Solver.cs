@@ -168,7 +168,7 @@ namespace SuperSudoku
                 DancingLinks(header);
 
 
-            } catch (Exception e) {
+            } catch (StopIterationException e) {
                 foreach (Node row in solutions) {
                     List<int> constraint = Enumerable.Repeat(0, 324).ToList();
                     constraint[((ColumnNode)row.GetColumn()).Col] = 1;
@@ -206,13 +206,13 @@ namespace SuperSudoku
             if (header.Right == header)
             {
                 // No columns left
-                throw new Exception("HUZZAH");
+                throw new StopIterationException();
             }
             else
             {
                 if (!HasZero(header))
                 {
-                    ColumnNode col = (ColumnNode)header.Right;
+                    ColumnNode col = pickColumn(header);
                     cover(col);
                     for (Node row = col.Down; row != col; row = row.Down)
                     {
@@ -261,6 +261,30 @@ namespace SuperSudoku
             }
             col.Right.Left = col;
             col.Left.Right = col;
+        }
+
+        private ColumnNode pickColumn(ColumnNode header)
+        {
+            ColumnNode smallestNode=header;
+            int smallest = int.MaxValue;
+            for (Node right = header.Right; right != header; right = right.Right)
+            {
+                int thisCol = 0;
+                for (Node down = header.Down; down != header; down = down.Down)
+                {
+                    thisCol = thisCol + 1;
+                }
+                if (thisCol < smallest)
+                {
+                    smallest = thisCol;
+                    smallestNode = (ColumnNode)right;
+                }
+            }
+            if (smallestNode == header)
+            {
+                throw new Exception("WTF");
+            }
+            return smallestNode;
         }
 
         private ColumnNode gridToColumnnodes(List<List<int>> grid)
@@ -396,4 +420,6 @@ namespace SuperSudoku
             Up = this;
         }
     }
+
+    public class StopIterationException : Exception { }
 }
