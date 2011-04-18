@@ -103,7 +103,19 @@ namespace SuperSudoku
         /// </summary>
         public int[] GetColumn(int col)
         {
-            return elts.Select((row) => Math.Abs(row[col])).ToArray();
+            return new int[] {
+                Math.Abs(elts[0][col]),
+                Math.Abs(elts[1][col]),
+                Math.Abs(elts[2][col]),
+                Math.Abs(elts[3][col]),
+                Math.Abs(elts[4][col]),
+                Math.Abs(elts[5][col]),
+                Math.Abs(elts[6][col]),
+                Math.Abs(elts[7][col]),
+                Math.Abs(elts[8][col])
+            };
+
+            //return elts.Select((row) => Math.Abs(row[col])).ToArray();
         }
 
         /// <summary>
@@ -111,7 +123,19 @@ namespace SuperSudoku
         /// </summary>
         public int[] GetRow(int row)
         {
-            return (int[])elts[row].Select((item) => Math.Abs(item)).ToArray();
+            return new int[] {
+                Math.Abs(elts[row][0]),
+                Math.Abs(elts[row][1]),
+                Math.Abs(elts[row][2]),
+                Math.Abs(elts[row][3]),
+                Math.Abs(elts[row][4]),
+                Math.Abs(elts[row][5]),
+                Math.Abs(elts[row][6]),
+                Math.Abs(elts[row][7]),
+                Math.Abs(elts[row][8])
+            };
+
+            //return (int[])elts[row].Select((item) => Math.Abs(item)).ToArray();
         }
 
         /// <summary>
