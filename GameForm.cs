@@ -68,18 +68,18 @@ namespace SuperSudoku
             {
                 MaybeTryGameOver();
                 RecalculateErrors();
-                if (isPlaying)
-                {
-                    RecalculateHints(row, col);
-                }
+                RecalculateHints(row, col);
                 ShowOrHideHintBar();
             };
 
             // When the user selects a different cell, mark/unmark errors and hints
             gcontrol.CellFocused += (int row, int col) =>
             {
-                RecalculateHints(row, col);
                 ShowOrHideHintBar();
+                if (isPlaying)
+                {
+                    RecalculateHints(row, col);
+                }
             };
 
             // Add a drop-down context menu to each textbox
@@ -282,6 +282,10 @@ namespace SuperSudoku
                     if (!solver.Solve(grid))
                     {
                         MessageBox.Show("This puzzle has errors. Erase some of your work and try again.");
+                    }
+                    else
+                    {
+                        nagAboutWonGame = false;
                     }
                     gcontrol.UpdateGridView();
                 }
