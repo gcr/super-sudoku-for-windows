@@ -9,6 +9,12 @@ using System.Windows.Forms;
 
 namespace SuperSudoku
 {
+
+    /// <summary>
+    /// This form is the "Generate New Puzzle" screen.
+    /// It allows the user to select between easy,
+    /// medium, and difficult puzzles to play.
+    /// </summary>
     public partial class DifficultyForm : Form
     {
         private Grid result;

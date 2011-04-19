@@ -103,6 +103,7 @@ namespace SuperSudoku
                                     grid.Set(solvedGrid.Get(row, col), true, row, col);
                                 }
                                 gcontrol.UpdateGridView();
+                                RecalculateErrors();
                             }
                         }));
                 }
@@ -264,7 +265,7 @@ namespace SuperSudoku
         /// </summary>
         private void HelpRulesClick(object sender, EventArgs e)
         {
-            Process.Start("http://puzzles.about.com/library/sudoku/blsudoku_tutorial01.htm");
+            Process.Start("http://gcr.github.com/super-sudoku-for-windows/");
         }
 
         /// <summary>

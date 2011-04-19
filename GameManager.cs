@@ -107,6 +107,7 @@ namespace SuperSudoku
             bool result = (new Solver().Solve(copyGrid));
             if (result)
             {
+                SaveGame(grid);
                 form.Hide();
                 GameForm gform = new GameForm(grid, true);
                 gform.ShowDialog();
@@ -116,6 +117,7 @@ namespace SuperSudoku
             {
                 if (MessageBox.Show(copyGrid.IsFull()? "This puzzle can be solved in more than one way. Play anyway?" : "This puzzle cannot be solved. Play anyway?", "Unsolvable Puzzle", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
+                    SaveGame(grid);
                     form.Hide();
                     GameForm gform = new GameForm(grid, true);
                     gform.ShowDialog();

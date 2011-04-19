@@ -142,7 +142,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(334, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(475, 6);
             // 
             // quitGameToolStripMenuItem
             // 
@@ -193,14 +193,14 @@
             // gameRulesToolStripMenuItem
             // 
             this.gameRulesToolStripMenuItem.Name = "gameRulesToolStripMenuItem";
-            this.gameRulesToolStripMenuItem.Size = new System.Drawing.Size(237, 34);
-            this.gameRulesToolStripMenuItem.Text = "Game &Rules";
+            this.gameRulesToolStripMenuItem.Size = new System.Drawing.Size(311, 34);
+            this.gameRulesToolStripMenuItem.Text = "Online Game &Rules";
             this.gameRulesToolStripMenuItem.Click += new System.EventHandler(this.HelpRulesClick);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(237, 34);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(311, 34);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.HelpAboutClick);
             // 
