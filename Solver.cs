@@ -41,6 +41,7 @@ namespace SuperSudoku
         public bool Solve(Grid grid)
         {
             int numSolutions = 0;
+            Grid solutionGrid = grid.Copy();
             if (FindErrors(grid).Count > 0)
             {
                 // fail fast!
@@ -50,13 +51,14 @@ namespace SuperSudoku
             try {
                 DepthFirstSearch(grid, () => {
                     numSolutions++;
+                    solutionGrid = grid.Copy();
                     if (numSolutions > 1) {
                         throw new StopIterationException();
                     }
                 });
             }
             catch (StopIterationException e) { }
-
+            grid.CopyFrom(solutionGrid);
             return numSolutions == 1;
         }
 

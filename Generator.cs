@@ -98,7 +98,7 @@ namespace SuperSudoku
                         targetBlanks = 45;
                         break;
                     case DifficultyLevel.Hard:
-                        targetBlanks = 60;
+                        targetBlanks = 50;
                         break;
                 }
 
