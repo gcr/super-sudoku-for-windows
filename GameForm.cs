@@ -196,8 +196,8 @@ namespace SuperSudoku
             Grid unsolvedGrid = grid.Copy();
             unsolvedGrid.ForEachSquare((row,col,val) =>
             {
-                if (grid.IsEditable(row,col)) {
-                    grid.Clear(row,col);
+                if (unsolvedGrid.IsEditable(row,col)) {
+                    unsolvedGrid.Clear(row,col);
                 }
             });
             GameManager.SaveGame(unsolvedGrid);
