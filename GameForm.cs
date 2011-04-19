@@ -13,7 +13,6 @@ namespace SuperSudoku
     public partial class GameForm : Form
     {
         private Grid grid;
-        private Grid solvedGrid;
         private SudokuGridControl gcontrol;
         private Solver solver = new Solver();
 
@@ -38,9 +37,6 @@ namespace SuperSudoku
             hintBarText.Text = "";
             if (isPlaying)
             {
-                // Solve the grid
-                solvedGrid = grid.Copy();
-                solver.Solve(solvedGrid);
                 solveButton.Text = "&Solve";
             }
             else
@@ -96,7 +92,16 @@ namespace SuperSudoku
                         {
                             if (grid.IsEditable(row, col))
                             {
-                                grid.Set(solvedGrid.Get(row, col), true, row, col);
+                                Grid solvedGrid = grid.Copy();
+                                solver.Solve(solvedGrid);
+                                if (!solvedGrid.IsFull())
+                                {
+                                    MessageBox.Show("This square cannot be solved because there are errors in your puzzle. Please erase some of your work and try again.");
+                                }
+                                else
+                                {
+                                    grid.Set(solvedGrid.Get(row, col), true, row, col);
+                                }
                                 gcontrol.UpdateGridView();
                             }
                         }));
