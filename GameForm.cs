@@ -148,7 +148,7 @@ namespace SuperSudoku
         /// </summary>
         private void FileGenerateNewPuzzleClick(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNoCancel);
+            DialogResult result = MessageBox.Show("Do you want to save your game first?", "Save game?", MessageBoxButtons.YesNoCancel);
             if (result == DialogResult.Yes)
             {
                 if (GameManager.SaveGame(grid))
@@ -167,7 +167,7 @@ namespace SuperSudoku
         /// </summary>
         private void FileEnterPuzzleClick(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNoCancel);
+            DialogResult result = MessageBox.Show("Do you want to save your game first?", "Save game?", MessageBoxButtons.YesNoCancel);
             if (result == DialogResult.Yes)
             {
                 if (GameManager.SaveGame(grid))
@@ -209,7 +209,7 @@ namespace SuperSudoku
         /// </summary>
         private void FileLoadClick(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNoCancel);
+            DialogResult result = MessageBox.Show("Do you want to save your game first?", "Save game?", MessageBoxButtons.YesNoCancel);
             if (result == DialogResult.Yes)
             {
                 if (GameManager.SaveGame(grid))
@@ -228,7 +228,7 @@ namespace SuperSudoku
         /// </summary>
         private void FileQuitClick(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Do you want to save youur game first?", "Save game?", MessageBoxButtons.YesNoCancel);
+            DialogResult result = MessageBox.Show("Do you want to save your game first?", "Save game?", MessageBoxButtons.YesNoCancel);
             if (result == DialogResult.Yes)
             {
                 if (GameManager.SaveGame(grid))
