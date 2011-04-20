@@ -8,16 +8,20 @@ namespace SuperSudoku
 
     /// <summary>
     /// This class is a sudoku grid.
+    /// 
+    /// The underlying representation is a 2D array.
+    /// Positive numbers are editable, negative numbers are not,
+    /// but that's a terrible detail to expose so we always
+    /// expect positive numbers in the external interface.
     /// </summary>
     public class Grid
     {
-
         private int[][] elts;
 
         /// <summary>
         /// Constructor: Turn a flat list of elements into a sudoku grid.
         /// </summary>
-        /// <param name="elements">Flat list of 81 elements. Each section of nine elements is a new row.</param>
+        /// <param name="elements">Flat list of 81 elements. Each nine consecutive elements is a new row.</param>
         public Grid(int[] elements)
         {
             if (elements.Length != 81)
@@ -58,7 +62,19 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// Gets the cell at given row and column. Returns a positive number.
+        /// Constructor: Create a completely blank sudoku grid.
+        /// </summary>
+        public Grid()
+        {
+            this.elts = Enumerable
+                        .Repeat(0, 9)
+                        .Select((_) => Enumerable.Repeat(0, 9).ToArray())
+                        .ToArray();
+        }
+
+        /// <summary>
+        /// Gets the cell at given row and column. Always returns a positive number
+        /// to ensure encapsulation.
         /// </summary>
         public int Get(int row, int col)
         {
@@ -66,7 +82,7 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// Clears the given cell, making it editable
+        /// Clears the given cell. Side effect: makes the cell editable.
         /// </summary>
         public void Clear(int row, int col)
         {
@@ -103,6 +119,9 @@ namespace SuperSudoku
         /// </summary>
         public int[] GetColumn(int col)
         {
+            //return elts.Select((row) => Math.Abs(row[col])).ToArray();
+
+            // speed hack (and my appeal to the copypasta gods)
             return new int[] {
                 Math.Abs(elts[0][col]),
                 Math.Abs(elts[1][col]),
@@ -114,8 +133,6 @@ namespace SuperSudoku
                 Math.Abs(elts[7][col]),
                 Math.Abs(elts[8][col])
             };
-
-            //return elts.Select((row) => Math.Abs(row[col])).ToArray();
         }
 
         /// <summary>
@@ -123,6 +140,9 @@ namespace SuperSudoku
         /// </summary>
         public int[] GetRow(int row)
         {
+            //return (int[])elts[row].Select((item) => Math.Abs(item)).ToArray();
+
+            // speed hack
             return new int[] {
                 Math.Abs(elts[row][0]),
                 Math.Abs(elts[row][1]),
@@ -134,8 +154,6 @@ namespace SuperSudoku
                 Math.Abs(elts[row][7]),
                 Math.Abs(elts[row][8])
             };
-
-            //return (int[])elts[row].Select((item) => Math.Abs(item)).ToArray();
         }
 
         /// <summary>
@@ -156,7 +174,7 @@ namespace SuperSudoku
         /// ? ? ?  ? ? ?  ? ? ?
         /// ? ? ?  ? ? ?  ? ? ?
         /// 
-        /// Calling GetSquareAbout(5, 6) will return {2, 0, 3, 1, 9, 5, 4, 8, 7}
+        /// calling GetSquareAbout(5, 6) will return {2, 0, 3, 1, 9, 5, 4, 8, 7}
         /// because cell at row 5, col 6 is in that square.
         /// </summary>
         public int[] GetSquareAbout(int row, int col)
@@ -179,20 +197,8 @@ namespace SuperSudoku
             return result;
         }
 
-
         /// <summary>
-        /// Constructor: Create a completely blank sudoku grid.
-        /// </summary>
-        public Grid()
-        {
-            this.elts = Enumerable
-                        .Repeat(0, 9)
-                        .Select((_) => Enumerable.Repeat(0, 9).ToArray())
-                        .ToArray();
-        }
-
-        /// <summary>
-        /// Return a copy of this grid.
+        /// Returns a copy of this grid. The two grids will share nothing.
         /// </summary>
         public Grid Copy()
         {
@@ -234,7 +240,8 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// Overwrite this grid's elements with elements from another grid
+        /// Overwrite this grid's elements with elements from another grid.
+        /// The two grids will share nothing.
         /// </summary>
         public void CopyFrom(Grid other)
         {

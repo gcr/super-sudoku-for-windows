@@ -13,7 +13,7 @@ namespace SuperSudoku
     public class GameManager
     {
         /// <summary>
-        /// Shows a dialog for saving the grid you pass.
+        /// Shows a dialog for saving the grid.
         /// </summary>
         /// <param name="grid">The grid to be saved</param>
         /// <returns>Whether the save succeeded. False if the user canceled.</returns>
@@ -95,6 +95,7 @@ namespace SuperSudoku
         /// </summary>
         internal static void PlayThisPuzzle(Grid oldGrid, Form form)
         {
+            // Set all the squares as non-editable
             Grid grid = oldGrid.Copy();
             grid.ForEachSquare((row, col, val) =>
             {
@@ -103,7 +104,9 @@ namespace SuperSudoku
                     grid.SetEditable(false, row, col);
                 }
             });
-            Grid copyGrid = grid.Copy();
+
+            // Tries to solve the grid. If the grid has no unique solution, warn first.
+            Grid copyGrid = grid.Copy(); // yes another copy; the solver will mess with this one.
             bool result = (new Solver().Solve(copyGrid));
             if (result)
             {

@@ -7,15 +7,18 @@ namespace SuperSudoku
 {
     public enum DifficultyLevel {Easy, Medium, Hard};
 
+    /// <summary>
+    /// This class generates new puzzles.
+    /// </summary>
     class Generator
     {
-
         private Random rand = new Random();
         private Solver solver = new Solver();
 
         /// <summary>
-        /// Helper function: count the blank squares
+        /// Helper function: count the blank squares in the given grid.
         /// </summary>
+        /// <returns>the number of blank squares</returns>
         private int CountBlank(Grid grid)
         {
             int nBlanks = 0;
@@ -31,6 +34,8 @@ namespace SuperSudoku
 
         /// <summary>
         /// Blank two squares in a symmetric fashion, or not.
+        /// 
+        /// We always use rotational symmetry because it's prettiest.
         /// </summary>
         private void MaybeRandomBlank(Grid grid)
         {
@@ -48,16 +53,16 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// Generates a grid with the given difficulty level
+        /// Generates a grid with the given difficulty level.
         /// </summary>
         public Grid Generate(DifficultyLevel difficulty)
         {
-            // Generates stuff!!!!!!111
+            // Generates stuff
             // 1. Randomnly fill in the top and left part of the grid.
             // 2. Try to solve it
-            // Until we have enough blanks:
-            //    remove ~two blanks symmetrically
-            //    if it isn't uniquely solvable, add those two blanks again.
+            // 3. Until we have enough blanks:
+            //      remove some blanks
+            //      if it isn't uniquely solvable, add those two blanks again.
             Grid grid = GenerateBlankGrid();
 
             Grid result;
@@ -79,12 +84,12 @@ namespace SuperSudoku
 
             if (solver.FindErrors(grid).Count > 0)
             {
+                // This is not enough to guarantee correctness.
+                // If we get an invalid grid, try try again!
                 result = Generate(difficulty);
             }
             else
             {
-
-                // Now, solve the grid.
                 solver.Solve(grid);
 
                 // How many blanks do we need?
@@ -107,8 +112,12 @@ namespace SuperSudoku
                 while (tries < 100 && CountBlank(grid) < targetBlanks)
                 {
                     Grid saveCopy = grid.Copy();
-                    // Solving is expensive. Picking squares to blank is easy!
-                    // we'll just try the extra time.
+                    // Solving is expensive. Blanking squares is easy!
+                    // When the grid is mostly full, you can blank squares
+                    // in relative safety without generating a non-unique
+                    // puzzle. When the puzzle gets more sparse, you
+                    // need to be more careful.
+                    // That's what we're doing here. Quick optimization.
                     for (int i = 0; i < (targetBlanks - CountBlank(grid))/2 + 1; i++)
                     {
                         MaybeRandomBlank(grid);
@@ -120,9 +129,9 @@ namespace SuperSudoku
                     }
                     tries++;
                 }
-                Console.WriteLine("Generated puzzle in " + tries + " tries with "+CountBlank(grid)+" blanks");
+                //Console.WriteLine("Generated puzzle in " + tries + " tries with "+CountBlank(grid)+" blanks");
 
-                // finally, set every square to be not editable
+                // Finally, set every square to be not editable
                 grid.ForEachSquare((r, c, val) =>
                 {
                     if (val != 0)
@@ -137,7 +146,8 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// In the event that a blank grid is needed, this method can be called.
+        /// In the event that a blank grid is needed, call this method!
+        /// (it's only here to satisfy the SDS requirements)
         /// </summary>
         public Grid GenerateBlankGrid()
         {

@@ -9,6 +9,11 @@ using System.Windows.Forms;
 
 namespace SuperSudoku
 {
+    /// <summary>
+    /// This UI control is a grid of text boxes suitable
+    /// for the containment and display of a Sudoku
+    /// puzzle. Only the finest quality Puzzles need apply.
+    /// </summary>
     public partial class SudokuGridControl : UserControl
     {
         public delegate void GridEvent(int row, int col);
@@ -89,14 +94,32 @@ namespace SuperSudoku
             // The only reason why I'm using subtables
             // is because C# doesn't provide me a way of setting border widths. Ew.
 
-            // First, initialize the boxes array
+            /* The nested table-within-tables looks something like this:
+             * 
+             *  +-------+------- - -
+             *  |+-+-+-+|
+             *  || | | ||
+             *  |+-+-+-+|
+             *  || | | ||
+             *  |+-+-+-+|
+             *  || | | ||
+             *  |+-+-+-+|
+             *  +-------+--- - -
+             *  |       |
+             *  |       |
+             *  |
+             * 
+             * 
+             */
+
+            // First, initialize the boxes array.
             boxes = new TextBox[9][];
             for (int i = 0; i < 9; i++)
             {
                 boxes[i] = new TextBox[9];
             }
 
-            // Then, draw the subtables.
+            // Then, draw the nine subtables.
             for (int tableRow = 0; tableRow < 3; tableRow++)
             {
                 table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, (float)(100.0 / 3)));
@@ -148,6 +171,7 @@ namespace SuperSudoku
             newBox.TextAlign = HorizontalAlignment.Center;
             newBox.MaxLength = 1;
             newBox.Margin = new Padding(1);
+
             // When the box is focused
             newBox.Enter += (object sender, EventArgs e) =>
             {
@@ -155,6 +179,7 @@ namespace SuperSudoku
                 if (this.onSelect != null) this.onSelect(row, col);
             };
             newBox.Click += (object sender, EventArgs e) => newBox.SelectAll();
+
             // When a key is pressed in the box
             newBox.KeyPress += (object sender, KeyPressEventArgs e) =>
             {
@@ -174,7 +199,8 @@ namespace SuperSudoku
                     newBox.SelectAll();
                 }
             };
-            // Special keys change hte focus
+
+            // Special keys change hte focus to other boxen
             newBox.KeyDown += (object sender, KeyEventArgs e) =>
             {
                 switch (e.KeyData)
@@ -212,7 +238,7 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// Called when the box is focused
+        /// Focus the desired box (Now With Extra Wraparound!)
         /// </summary>
         private void FocusBox(int row, int col)
         {
@@ -225,6 +251,7 @@ namespace SuperSudoku
 
         /// <summary>
         /// Called when the user tries to clear the text box
+        /// Silly user
         /// </summary>
         private void ClearCell(int row, int col)
         {
@@ -235,9 +262,8 @@ namespace SuperSudoku
             }
         }
 
-
         /// <summary>
-        ///  Called when the user changes the text box
+        /// Called when the user changes the text box
         /// </summary>
         private void SetCell(int row, int col, int value)
         {
@@ -250,6 +276,8 @@ namespace SuperSudoku
         /// <summary>
         /// Called as the control's resize handler, this function
         /// picks good font sizes and fixes the grid location.
+        /// Tries to make the grid as big as possible while
+        /// maintaining aspect.
         /// </summary>
         private void FixFontsAndSize(object sender, EventArgs e)
         {
@@ -295,7 +323,7 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// Causes this control to reflect the state of the grid.
+        /// Updates this control's view to reflect the state of the grid.
         /// </summary>
         public void UpdateGridView()
         {
@@ -349,6 +377,9 @@ namespace SuperSudoku
             tbox.ForeColor = Color.Red;
         }
 
+        /// <summary>
+        /// Clears all red cells
+        /// </summary>
         public void ClearErrors()
         {
             UpdateGridView();

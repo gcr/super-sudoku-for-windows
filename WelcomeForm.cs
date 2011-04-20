@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace SuperSudoku
 {
+    /// <summary>
+    /// The form that the users see first.
+    /// </summary>
     public partial class WelcomeForm : Form
     {
 
@@ -17,6 +20,9 @@ namespace SuperSudoku
             InitializeComponent();
         }
 
+        /// <summary>
+        /// When the "generate puzzle" button is clicked
+        /// </summary>
         private void generateButton_Click(object sender, EventArgs e)
         {
             GameManager.GeneratePuzzle(this);
@@ -30,6 +36,9 @@ namespace SuperSudoku
             GameManager.EnterNewPuzzle(this);
         }
 
+        /// <summary>
+        /// When the user clicks "Load"
+        /// </summary>
         private void loadButton_Click(object sender, EventArgs e)
         {
             GameManager.LoadGame(this);

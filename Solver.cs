@@ -21,8 +21,14 @@ namespace SuperSudoku
             this.PossibleValues = possibleValues;
         }
     }
+    /// <summary>
+    /// This helper class is because C# doesn't have generators.
+    /// </summary>
     public class StopIterationException : Exception { }
 
+    /// <summary>
+    /// This class solves sudoku grids in-place.
+    /// </summary>
     public class Solver
     {
         private Random rand = new Random();
@@ -36,7 +42,8 @@ namespace SuperSudoku
         /// </param>
         /// <returns>
         /// If the puzzle can be unambiguously solved, Solve() will return true.
-        /// If the puzzle cannot be solved or is invalid, this will return false.
+        /// If the puzzle cannot be solved or has more than one solution,
+        /// this will return false.
         /// </returns>
         public bool Solve(Grid grid)
         {
@@ -48,8 +55,15 @@ namespace SuperSudoku
                 return false;
             }
 
+            // this bit here GREATLY simplifies DepthFirstSearch.
+            // Using exceptions and a lambda to terminate after two
+            // solutions frees DepthFirstSearch from worrying about
+            // all that logic at the cost of a closure and tricky
+            // exception handling.
+            // all of this is to avoid C#'s lack of generators, buh
             try {
                 DepthFirstSearch(grid, () => {
+                    // this lambda gets run on each solution
                     numSolutions++;
                     solutionGrid = grid.Copy();
                     if (numSolutions > 1) {
@@ -58,15 +72,31 @@ namespace SuperSudoku
                 });
             }
             catch (StopIterationException e) { }
+            // (just pretend that empty catch block is a generator)
+
             grid.CopyFrom(solutionGrid);
             return numSolutions == 1;
         }
 
+        /// <summary>
+        /// The actual meat of the depthfirst search goes here.
+        /// (solve is mostly bookkeeping)
+        /// </summary>
+        /// <param name="eachSolutionAction">
+        /// This lambda will be run once for each solution.
+        /// </param>
+        /// <param name="grid">
+        /// This grid will be left in an undefined state
+        /// after DepthFirstSearch() terminates.
+        /// If you want a good solution, be sure to save
+        /// a copy in your eachSolutionAction.
+        /// </param>
         public void DepthFirstSearch(Grid grid, Action eachSolutionAction)
         {
             CellConsideration cell = Consider(grid);
-            if (grid.IsFull())// || !valid)
+            if (grid.IsFull())
             {
+                // Found a solution!
                 eachSolutionAction();
             }
             else if (cell != null)
@@ -76,6 +106,9 @@ namespace SuperSudoku
                     grid.Set(hint, true, cell.Row, cell.Col);
                     DepthFirstSearch(grid, eachSolutionAction);
                     grid.Set(0, true, cell.Row, cell.Col);
+                    // speed hack: we know the previous square
+                    // was a zero, so no need to save a copy
+                    // of the grid every time.
                 }
             }
         }
@@ -83,21 +116,19 @@ namespace SuperSudoku
 
         /// <summary>
         /// Get the list of valid moves for the given cell in the given grid.
-        /// Used by the Hints bar.
+        /// Used by the Hints bar and Consider()
         /// </summary>
         /// <returns>
         /// A list of valid move choices.
         /// </returns>
         public List<int> GetHintsFor(Grid grid, int row, int col)
         {
+            // believe it or not, Lists are faster than int[]s for some reason
             List<int> stuff = grid.GetColumn(col).Concat(grid.GetRow(row)).Concat(grid.GetSquareAbout(row, col)).ToList();
-            //int[] gCols = grid.GetColumn(col);
-            //int[] gRows = grid.GetRow(row);
-            //int[] gSq = grid.GetSquareAbout(row, col);
             List<int> results = new List<int>();
             for (int i = 1; i <= 9; i++)
             {
-                if (!stuff.Contains(i))//(gCols.Contains(i) || gRows.Contains(i) || gSq.Contains(i)))
+                if (!stuff.Contains(i))
                 {
                     results.Add(i);
                 }
@@ -110,7 +141,10 @@ namespace SuperSudoku
         /// Considers each cell of the grid.
         /// </summary>
         /// <returns>
-        /// Returns is a list of CellConsiderations. Traverse this list in order.
+        /// Returns the cell with the smallest number
+        /// of possible values. This square is a good
+        /// place to continue search.
+        /// Returns null if the grid is invalid.
         /// </returns>
         private CellConsideration Consider(Grid grid)
         {
@@ -123,9 +157,6 @@ namespace SuperSudoku
                     if (grid.Get(row, col) == 0)
                     {
                         List<int> hints = GetHintsFor(grid, row, col);
-                        /*if (hints.Count == 1) {
-                            grid.Set(hints[0], true, row, col);
-                        } else*/
                         if (hints.Count == 0)
                         {
                             // We found a square that has no solution
@@ -144,21 +175,6 @@ namespace SuperSudoku
             return smallestConsideration;
         }
 
-        /*/// <summary>
-        /// Fills in cells that only have one possible value
-        /// </summary>
-        /// <returns>whether I touched the grid in any way</returns>
-        private void FillSingletons(Grid grid)
-        {
-            CellConsideration considerations = Consider(grid);
-            if (considerations.Count > 0 && considerations[0].PossibleValues.Count == 1)
-            {
-                grid.Set(considerations[0].PossibleValues[0], true, considerations[0].Row, considerations[0].Col);
-                FillSingletons(grid);
-            }
-        }*/
-
-
         /// <summary>
         /// Returns true if the puzzle isn't obviously broken.
         /// </summary>
@@ -168,7 +184,7 @@ namespace SuperSudoku
         }
 
         /// <summary>
-        /// Finds errors in the grid. Returns a list of cells where:
+        /// Finds errors in the grid. Returns a list of cells such that:
         ///     - there is another cell with the same value in the row
         ///     - there is another cell with the same value in the column
         ///     - there is another cell with the same value in the 3x3 square

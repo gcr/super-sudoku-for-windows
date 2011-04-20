@@ -12,15 +12,18 @@ namespace SuperSudoku
 {
     public partial class GameForm : Form
     {
+        // The actual grid object
         private Grid grid;
+        // The UI control that holds the grid object
         private SudokuGridControl gcontrol;
+        // The Solver so we can solve grids
         private Solver solver = new Solver();
-
+        // The game time in seconds
         private int gameTime = 0;
-
+        // UI flags
         private bool nagAboutErrors = true;
         private bool nagAboutWonGame = true;
-
+        // "True" if we're in playing mode. "False" if we're in editing mode.
         private bool isPlaying;
 
         /// <summary>
@@ -44,7 +47,7 @@ namespace SuperSudoku
                 solveButton.Text = "&Enter Puzzle";
             }
                 
-
+            // make the grid control and put it somewhere
             this.gcontrol = new SudokuGridControl(grid);
             this.gridPanel.Controls.Add(gcontrol);
             gcontrol.Dock = DockStyle.Fill;
@@ -84,12 +87,15 @@ namespace SuperSudoku
                 tbox.ContextMenu = new ContextMenu();
                 if (isPlaying)
                 {
+                    // The context menu should only appear when in "Playing" mode
                     tbox.ContextMenu.MenuItems.Add(new MenuItem("Show &Hints", (s, e) =>
                         {
                             hintBarText.Show();
+                            // the hints bar will disappear on next call to ShowOrHideHints()
                         }));
                     tbox.ContextMenu.MenuItems.Add(new MenuItem("&Solve This Square", (s, e) =>
                         {
+                            // solve the grid and copy the value
                             if (grid.IsEditable(row, col))
                             {
                                 Grid solvedGrid = grid.Copy();
@@ -109,6 +115,7 @@ namespace SuperSudoku
                 }
             });
 
+            // initial setup: start the timer and optionally show errors.
             gameTimerTick(this, new EventArgs());
             RecalculateErrors();
             ShowOrHideHintBar();
@@ -116,6 +123,7 @@ namespace SuperSudoku
 
         /// <summary>
         /// Check to see if the game is finished.
+        /// If the grid is full, nag the user about it.
         /// </summary>
         private void MaybeTryGameOver()
         {
@@ -123,6 +131,7 @@ namespace SuperSudoku
             {
                 if (solver.FindErrors(grid).Count > 0)
                 {
+                    // The user incorrectly entered some values
                     if (nagAboutErrors && showErrorsToolStripMenuItem.Checked)
                     {
                         MessageBox.Show("There are errors.");
@@ -133,9 +142,11 @@ namespace SuperSudoku
                         RecalculateErrors();
                     }
                     nagAboutErrors = false;
+                    // don't bother them again
                 }
                 else if (nagAboutWonGame)
                 {
+                    // The user correctly solved the grid.
                     nagAboutWonGame = false;
                     MessageBox.Show("Good job! Your time: "+formatGameTime());
                 }
@@ -247,6 +258,7 @@ namespace SuperSudoku
         /// </summary>
         private void OptionsShowHintsClick(object sender, EventArgs e)
         {
+            // toggle checkbox
             alwaysShowHintsToolStripMenuItem.Checked = !alwaysShowHintsToolStripMenuItem.Checked;
             ShowOrHideHintBar();
         }
@@ -256,6 +268,7 @@ namespace SuperSudoku
         /// </summary>
         private void OptionsShowErrorsClick(object sender, EventArgs e)
         {
+            // toggle checkbox
             showErrorsToolStripMenuItem.Checked = !showErrorsToolStripMenuItem.Checked;
             RecalculateErrors();
         }
@@ -265,6 +278,7 @@ namespace SuperSudoku
         /// </summary>
         private void HelpRulesClick(object sender, EventArgs e)
         {
+            // Abin wrote our wonderful hand-written manual, so pop that open
             Process.Start("http://gcr.github.com/super-sudoku-for-windows/");
         }
 
@@ -273,6 +287,7 @@ namespace SuperSudoku
         /// </summary>
         private void HelpAboutClick(object sender, EventArgs e)
         {
+            // just an about dialog
             new AboutBox().ShowDialog();
         }
 
@@ -295,6 +310,7 @@ namespace SuperSudoku
                         nagAboutWonGame = false;
                     }
                     gcontrol.UpdateGridView();
+                    RecalculateErrors();
                 }
             }
             else
@@ -308,6 +324,8 @@ namespace SuperSudoku
         /// </summary>
         private void RecalculateErrors()
         {
+            // the grid control can show squares in red. Clear them and then
+            // do it again.
             gcontrol.ClearErrors();
             if (showErrorsToolStripMenuItem.Checked)
             {
@@ -366,11 +384,18 @@ namespace SuperSudoku
             return grid.IsFull() && solver.FindErrors(grid).Count == 0;
         }
 
+        /// <summary>
+        /// Formats a time.
+        /// Ex: If gameTime is 75, returns "1:15"
+        /// </summary>
         private string formatGameTime()
         {
             return gameTime / 60 + ":" + ((gameTime % 60) < 10 ? "0" : "") + gameTime%60;
         }
 
+        /// <summary>
+        /// Each second, update timer
+        /// </summary>
         private void gameTimerTick(object sender, EventArgs e)
         {
             if (isPlaying)
@@ -384,6 +409,9 @@ namespace SuperSudoku
             }
         }
 
+        /// <summary>
+        /// When the user closes the form, prompt for save
+        /// </summary>
         private void GameFormClosing(object sender, FormClosingEventArgs e)
         {
             if (this.Visible)

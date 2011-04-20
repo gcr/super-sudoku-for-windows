@@ -18,7 +18,16 @@ namespace SuperSudoku
     public partial class DifficultyForm : Form
     {
         private Grid result;
+        public Grid Result
+        {
+            get { return result; }
+        }
+
         private bool hasResult = false;
+        public bool HasResult
+        {
+            get { return hasResult; }
+        }
 
         private Grid easy;
         private Grid med;
@@ -33,6 +42,9 @@ namespace SuperSudoku
             makeNewGrids();
         }
 
+        /// <summary>
+        /// This method creates three new sudoku grids.
+        /// </summary>
         private void makeNewGrids()
         {
             easy = gen.Generate(DifficultyLevel.Easy);
@@ -55,16 +67,6 @@ namespace SuperSudoku
             hardPanel.Controls.Add(hardGcontrol);
             hardGcontrol.Dock = DockStyle.Fill;
             hardGcontrol.IsEditable = false;
-        }
-
-        public Grid Result
-        {
-            get { return result; }
-        }
-
-        public bool HasResult
-        {
-            get { return hasResult; }
         }
 
         private void easyButton_Click(object sender, EventArgs e)
