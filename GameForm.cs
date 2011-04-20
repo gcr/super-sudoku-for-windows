@@ -383,5 +383,21 @@ namespace SuperSudoku
                 timerLabel.Text = "Editing puzzle";
             }
         }
+
+        private void GameFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.Visible)
+            {
+                DialogResult result = MessageBox.Show("Do you want to save your game first?", "Save game?", MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.Yes)
+                {
+                    GameManager.SaveGame(grid);
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
     }
 }

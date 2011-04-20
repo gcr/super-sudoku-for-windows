@@ -247,6 +247,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "GameForm";
             this.Text = "Super Sudoku";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameFormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
